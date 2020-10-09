@@ -1,0 +1,113 @@
+package com.example.jddemo.excelThread;
+
+
+import com.alibaba.excel.annotation.ExcelProperty;
+
+/**
+ *  create  by dell
+ *  time  2020-09-16
+ */
+public class DemoData {
+
+    @ExcelProperty("字符串标题1")
+    private String str1;
+    @ExcelProperty("字符串标题2")
+    private String str2;
+    @ExcelProperty("字符串标题3")
+    private String str3;
+    @ExcelProperty("字符串标题4")
+    private String str4;
+    @ExcelProperty("字符串标题5")
+    private String str5;
+    @ExcelProperty("字符串标题6")
+    private String str6;
+    @ExcelProperty("字符串标题7")
+    private String str7;
+    @ExcelProperty("字符串标题8")
+    private String str8;
+    @ExcelProperty("字符串标题9")
+    private String str9;
+    @ExcelProperty("字符串标题10")
+    private String str10;
+
+
+    public String getStr1() {
+        return str1;
+    }
+
+    public void setStr1(String str1) {
+        this.str1 = str1;
+    }
+
+    public String getStr2() {
+        return str2;
+    }
+
+    public void setStr2(String str2) {
+        this.str2 = str2;
+    }
+
+    public String getStr3() {
+        return str3;
+    }
+
+    public void setStr3(String str3) {
+        this.str3 = str3;
+    }
+
+    public String getStr4() {
+        return str4;
+    }
+
+    public void setStr4(String str4) {
+        this.str4 = str4;
+    }
+
+    public String getStr5() {
+        return str5;
+    }
+
+    public void setStr5(String str5) {
+        this.str5 = str5;
+    }
+
+    public String getStr6() {
+        return str6;
+    }
+
+    public void setStr6(String str6) {
+        this.str6 = str6;
+    }
+
+    public String getStr7() {
+        return str7;
+    }
+
+    public void setStr7(String str7) {
+        this.str7 = str7;
+    }
+
+    public String getStr8() {
+        return str8;
+    }
+
+    public void setStr8(String str8) {
+        this.str8 = str8;
+    }
+
+    public String getStr9() {
+        return str9;
+    }
+
+    public void setStr9(String str9) {
+        this.str9 = str9;
+    }
+
+    public String getStr10() {
+        return str10;
+    }
+
+    public void setStr10(String str10) {
+        this.str10 = str10;
+    }
+}

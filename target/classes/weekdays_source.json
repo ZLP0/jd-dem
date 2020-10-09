@@ -1,0 +1,27 @@
+[
+  {
+    "year":2020,
+    "months":[
+      {
+        "month":8,
+        "holidays":[1],
+        "shiftDays":[],
+        "remark":"中秋一天 "
+      },
+      {
+        "month":10,
+        "holidays":[1,2,3,4,5],
+        "shiftDays":[],
+        "remark":"国庆3天+调休2天"
+      },
+      {
+        "month":9,
+        "holidays":[5],
+        "shiftDays":[],
+        "remark":"国庆3天+调休2天"
+      }
+    ]
+  }
+
+
+]
