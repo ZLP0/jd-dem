@@ -20,9 +20,16 @@ public class UnsafeUtils {
         return null;
     }
 
-    //获取 内存偏移量
-    public static long getOffset(Unsafe unsafe, Class classz, String attributeName) throws NoSuchFieldException {
-        return unsafe.objectFieldOffset(classz.getDeclaredField(attributeName));
+    /**
+     * 获取  指定类的属性 内存偏移量
+     * @param classz         对应的class
+     * @param attributeName  属性名称
+     * @return
+     * @throws NoSuchFieldException
+     */
+    public static long getOffset(Class classz, String attributeName) throws NoSuchFieldException {
+
+        return getUnsafe().objectFieldOffset(classz.getDeclaredField(attributeName));
     }
 
 
