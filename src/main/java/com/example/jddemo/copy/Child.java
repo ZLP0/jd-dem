@@ -1,7 +1,7 @@
 package com.example.jddemo.copy;
 
 public class Child {
-    String str="zlp测试";
+
     private String name;
 
     private int age;
