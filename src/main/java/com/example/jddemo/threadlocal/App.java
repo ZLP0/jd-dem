@@ -4,6 +4,7 @@ import com.example.jddemo.threadlocal.context.Context;
 
 public class App {
 
+    int a=1;
 
     public static void main(String[] args) {
 
