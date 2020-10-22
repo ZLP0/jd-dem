@@ -1,8 +1,8 @@
 package com.example.jddemo.threadlocal.context;
 
 public class Context {
-  int a=3;
 
+    String  str="单个文件回滚";
     private static final AbstractContextCore contextCore=new ContextCore();
 
 

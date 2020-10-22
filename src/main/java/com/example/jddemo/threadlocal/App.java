@@ -4,7 +4,7 @@ import com.example.jddemo.threadlocal.context.Context;
 
 public class App {
 
-    int a=1;
+    String  str="单个文件回滚";
 
     public static void main(String[] args) {
 
