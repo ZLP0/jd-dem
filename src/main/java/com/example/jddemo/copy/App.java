@@ -4,7 +4,7 @@ import org.springframework.beans.BeanUtils;
 
 public class App {
 
-
+   String str="zlp测试";
    public static void main(String[] args) {
 
       Person person1= new Person();
