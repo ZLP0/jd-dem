@@ -3,7 +3,7 @@ package com.example.jddemo.threadlocal;
 import com.example.jddemo.threadlocal.context.Context;
 
 public class App {
-
+int a=1;
 
     public static void main(String[] args) {
         for (int i = 0; i < 2; i++) {//启动三个线程
