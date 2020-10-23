@@ -3,7 +3,6 @@ package com.example.jddemo.enmu;
 public enum ActionType {
 
     BID_EN(1);
-    String str="枚举";
     private int type;
 
     ActionType(int type) {
