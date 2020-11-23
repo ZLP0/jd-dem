@@ -32,6 +32,13 @@ public class upload {
                         Integer rowIndex = context.readRowHolder().getRowIndex();
                         //默认从第二行开始读取数据
                         // 如果第二行也是表头 则不处理
+
+                        //字符串表头	数字表头	日期表头
+                        //              表头2
+                        //字符串0	   数字0	         时间0
+                        //字符串1	   数字1	         时间1
+                        //字符串2	   数字2	         时间2
+
                         if(rowIndex<=1)
                         {
                             return;
