@@ -1,10 +1,14 @@
 package com.example.jddemo.excel.upload;
 
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
+import com.alibaba.excel.write.builder.ExcelWriterSheetBuilder;
+import com.alibaba.excel.write.metadata.WriteSheet;
 import org.apache.commons.collections4.CollectionUtils;
 
+import java.io.File;
 import java.util.*;
 
 public class upload {
@@ -24,11 +28,35 @@ public class upload {
                 System.out.println("异常信息：：导出数据为空");
                 return;
             }
+            ExcelWriter excelWriter = null;
             String fileName = "D:\\" + System.currentTimeMillis() + ".xlsx";
             List<List<String>> head = excelDto.getHead();
             head.add(0, Arrays.asList("错误信息提示"));
-            EasyExcel.write(fileName).head(head).sheet("模板")
-                    .doWrite(excelDto.getContent());
+           /* ExcelWriterSheetBuilder writerSheetBuilder = EasyExcel.write(fileName).head(head).sheet("模板");
+            writerSheetBuilder.doWrite(excelDto.getContent());*/
+
+           // 手动关闭流
+            File tempFile=null;
+            try {
+                tempFile= File.createTempFile("testtest", ".xlsx");
+                excelWriter = EasyExcel.write(tempFile).head(head).build();
+                WriteSheet writeSheet = EasyExcel.writerSheet("模板").build();
+                excelWriter.write(excelDto.getContent(), writeSheet);
+                excelWriter.write(excelDto.getContent(), writeSheet);
+
+                //tempFile  上传文件服务器
+
+            }catch(Exception e){
+
+            } finally {
+                // 千万别忘记finish 会帮忙关闭流
+                if (excelWriter != null) {
+                    excelWriter.finish();
+                }
+                if (tempFile != null && tempFile.exists()) {
+                    tempFile.delete();
+                }
+            }
         }
 
 
