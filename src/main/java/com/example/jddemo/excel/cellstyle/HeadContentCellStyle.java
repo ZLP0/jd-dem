@@ -21,7 +21,6 @@ public class HeadContentCellStyle {
                 .registerWriteHandler(myHorizontalCellStyleStrategy())
                 .doWrite(dataList());
     }
-
     /**
      * 创建表头
      * @return
