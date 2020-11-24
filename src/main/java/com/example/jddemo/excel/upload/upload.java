@@ -3,7 +3,6 @@ package com.example.jddemo.excel.upload;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
-import com.alibaba.excel.read.builder.ExcelReaderSheetBuilder;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.util.*;
@@ -14,19 +13,16 @@ public class upload {
 
 //=======================上传文件并校验=====================================================================
          Map<Integer, String> head = new HashMap<>();
-        List<Map<Integer, String>> data = new LinkedList<>();
+        List<Map<Integer, String>> saveData = new LinkedList<>();
         List<List<Object>> responseData = new LinkedList<>();// 有错误数据则  对应错误信息返回给前端
 
-        ExcelReaderSheetBuilder sheet = EasyExcel.read("D:\\1606185114659.xlsx").sheet();
         EasyExcel.read("D:\\1606185114659.xlsx").sheet()
                 .registerReadListener(new AnalysisEventListener<Map<Integer, String>>() {
-
                     // easy-excel   默认把第一行当做表头
                     @Override
                     public void invokeHeadMap(Map<Integer, String> headMap, AnalysisContext context) {
                         head.putAll(headMap);
                     }
-
                     @Override
                     public void invoke(Map<Integer, String> row, AnalysisContext context) {
                         Integer rowIndex = context.readRowHolder().getRowIndex();
@@ -52,7 +48,7 @@ public class upload {
                             msg.append(number+"不是数字");
                         }
                         System.out.println("读取行"+rowIndex+"数据");
-                        data.add(row);
+                        saveData.add(row);
 
                         responseRow.add(0,msg.toString());
                         responseData.add(responseRow);
@@ -60,11 +56,12 @@ public class upload {
 
                     @Override
                     public void doAfterAllAnalysed(AnalysisContext analysisContext) {
-                        System.out.println("读取文件成功,一共:{"+data.size()+"}行......");
-
+                        System.out.println("读取文件成功,一共:{"+saveData.size()+"}行......");
                         if(CollectionUtils.isEmpty(responseData)){
+                            //insert into table values   saveData
                             return;
                         }
+
                         //===============导出错误文件=======================================================================================
                         String fileName = "D:\\" + System.currentTimeMillis() + ".xlsx";
                         // 这里 需要指定写用哪个class去写，然后写到第一个sheet，名字为模板 然后文件流会自动关闭
@@ -78,7 +75,7 @@ public class upload {
                     }
                 }).doRead();
         System.out.println("文件头："+head);
-        System.out.println("数据："+data);
+        System.out.println("数据："+saveData);
 
 
 
