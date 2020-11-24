@@ -14,7 +14,8 @@ public class upload {
 //=======================上传文件并校验=====================================================================
          Map<Integer, String> head = new HashMap<>();
         List<Map<Integer, String>> saveData = new LinkedList<>();
-        List<List<Object>> responseData = new LinkedList<>();// 有错误数据则  对应错误信息返回给前端
+
+        ExcelDto excelDto=new ExcelDto();// 有错误数据则  对应错误信息返回给前端
 
         EasyExcel.read("D:\\1606185114659.xlsx").sheet()
                 .registerReadListener(new AnalysisEventListener<Map<Integer, String>>() {
@@ -49,20 +50,18 @@ public class upload {
                         }
                         System.out.println("读取行"+rowIndex+"数据");
                         saveData.add(row);
-
                         responseRow.add(0,msg.toString());
-                        responseData.add(responseRow);
+                        excelDto.getContent().add(responseRow);
                     }
 
                     @Override
                     public void doAfterAllAnalysed(AnalysisContext analysisContext) {
                         System.out.println("读取文件成功,一共:{"+saveData.size()+"}行......");
-                        if(CollectionUtils.isEmpty(responseData)){
+                        if(CollectionUtils.isEmpty(excelDto.getContent())){
                             //insert into table values   saveData
                             return;
                         }
-
-                        //===============导出错误文件=======================================================================================
+                        //===============导出错误文件=========后续优化 将数据写入临时文件 再删除==============================================================================
                         String fileName = "D:\\" + System.currentTimeMillis() + ".xlsx";
                         // 这里 需要指定写用哪个class去写，然后写到第一个sheet，名字为模板 然后文件流会自动关闭
                         ArrayList<List<String>> responseHead = new ArrayList<>();
@@ -71,7 +70,7 @@ public class upload {
                         });
                         responseHead.add(0,Arrays.asList("错误信息提示"));
                         EasyExcel.write(fileName).head(responseHead).sheet("模板")
-                                .doWrite(responseData);
+                                .doWrite(excelDto.getContent());
                     }
                 }).doRead();
         System.out.println("文件头："+head);
