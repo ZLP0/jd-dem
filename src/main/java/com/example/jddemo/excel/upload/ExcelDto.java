@@ -1,12 +1,13 @@
 package com.example.jddemo.excel.upload;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ExcelDto {
 
-    private List<List<String>> head;
+    private List<List<String>> head=new ArrayList<>();
 
-    private List<List<Object>> content;
+    private List<List<Object>> content=new ArrayList<>();
 
    private boolean  isHaveError;//默认false
 
@@ -32,5 +33,14 @@ public class ExcelDto {
 
     public void setHaveError(boolean haveError) {
         isHaveError = haveError;
+    }
+
+    @Override
+    public String toString() {
+        return "ExcelDto{" +
+                "head=" + head +
+                ", content=" + content +
+                ", isHaveError=" + isHaveError +
+                '}';
     }
 }
