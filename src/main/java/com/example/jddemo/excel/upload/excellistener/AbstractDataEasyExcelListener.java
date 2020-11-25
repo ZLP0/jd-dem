@@ -28,6 +28,7 @@ public abstract class AbstractDataEasyExcelListener extends AnalysisEventListene
             //写入临时文件
             //excelWriter = EasyExcel.write(tempFile).head(headerror).build();
             excelWriter = EasyExcel.write("D:\\abc.xlsx").head(head).build();
+            excelDto.setHead(head);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -35,7 +36,6 @@ public abstract class AbstractDataEasyExcelListener extends AnalysisEventListene
 
     @Override
     public void invokeHeadMap(Map<Integer, String> headMap, AnalysisContext context) {
-
         List<String> list = new ArrayList<>(headMap.values());
         //初始化表头
         if(head.size()==0){
@@ -50,7 +50,6 @@ public abstract class AbstractDataEasyExcelListener extends AnalysisEventListene
             List<String> headI = this.head.get(i+1);
             headI.add(str);
         }
-        excelDto.setHead(head);
     }
 
     @Override
