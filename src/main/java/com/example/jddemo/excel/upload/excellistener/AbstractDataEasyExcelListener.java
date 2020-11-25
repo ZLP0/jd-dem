@@ -14,10 +14,10 @@ public abstract class AbstractDataEasyExcelListener extends AnalysisEventListene
 
     protected   ExcelDto        excelDto    = new ExcelDto();
 
-    private     File            tempFile    = null;
+    private     File            tempFile    = null;//临时文件
     private     ExcelWriter     excelWriter = null;
     private     WriteSheet      writeSheet  = null;
-    private     StringBuilder   msg         = null;
+    private     StringBuilder   msg         = null;// 行数据校验 提示信息
     private List<List<String>>  head        = new ArrayList<>();//生成动态表头
 
     public AbstractDataEasyExcelListener() {
@@ -64,6 +64,8 @@ public abstract class AbstractDataEasyExcelListener extends AnalysisEventListene
         //saveData.add(row);
         responseRow.add(0, msg.toString());
         excelDto.getTmpContent().add(responseRow);
+        //保存全量数据  高并发或者数据量较大时不建议使用
+        excelDto.getSaveContent().add(responseRow);
         //  测试异常
        /* if (rowIndex == 2) {
             int a = 1 / 0;

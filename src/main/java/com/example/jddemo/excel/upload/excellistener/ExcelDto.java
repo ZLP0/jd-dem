@@ -9,6 +9,8 @@ public class ExcelDto {
 
     private List<List<Object>> tmpContent = new ArrayList<>();//临时内容
 
+    private List<List<Object>> saveContent = new ArrayList<>();//保存全量数据  高并发或者数据量较大时不建议使用
+
     private boolean isHaveError;//默认false
 
     private int count = 3000;//三千条数据 提交一次
@@ -55,12 +57,23 @@ public class ExcelDto {
         this.url = url;
     }
 
+    public List<List<Object>> getSaveContent() {
+        return saveContent;
+    }
+
+    public void setSaveContent(List<List<Object>> saveContent) {
+        this.saveContent = saveContent;
+    }
+
     @Override
     public String toString() {
         return "ExcelDto{" +
                 "head=" + head +
-                ", content=" + tmpContent +
+                ", tmpContent=" + tmpContent +
+                ", saveContent=" + saveContent +
                 ", isHaveError=" + isHaveError +
+                ", count=" + count +
+                ", url='" + url + '\'' +
                 '}';
     }
 }
