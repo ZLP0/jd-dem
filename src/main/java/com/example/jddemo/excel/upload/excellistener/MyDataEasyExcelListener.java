@@ -1,0 +1,53 @@
+package com.example.jddemo.excel.upload.excellistener;
+
+import org.springframework.stereotype.Component;
+
+import java.io.File;
+import java.util.List;
+
+@Component
+public class MyDataEasyExcelListener extends AbstractDataEasyExcelListener {
+
+    @Override
+    protected void validator(List<Object> row, StringBuilder msg) {
+        // 数据校验
+        Object number = row.get(1);
+        if (!isNumber(number.toString(), 2)) {
+            // System.out.println(number + "不是数字");
+            msg.append(number + "不是数字");
+            excelDto.setHaveError(true);
+        }
+        //校验 。。。。。。。。。
+        if (true) {
+
+        }
+    }
+
+    /**
+     * 保存数据库
+     *
+     * @param excelDto
+     */
+    @Override
+    protected void save(ExcelDto excelDto) {
+
+    }
+
+    @Override
+    protected void saveFile(File tempFile) {
+        this.excelDto.setUrl("url://sdkjflkdsjf");
+    }
+
+    /**
+     * 数字类型  最多保留两位小数
+     *
+     * @param str   校验的字符串
+     * @param scale 保留小数位
+     * @return
+     */
+    public static boolean isNumber(String str, int scale) {
+        String reg = "^(\\d{1,8})(\\.\\d{1," + scale + "})?$";
+        return str.matches(reg);
+
+    }
+}
