@@ -33,6 +33,8 @@ public class MyDataEasyExcelListener extends AbstractEasyExcelDataListener {
             System.out.println("校验数据有错误信息  不执行数据库操作");
             return;
         }
+        List<List<Object>> content = excelDto.getContent();
+        System.out.println("保存的数据:"+content);
     }
 
     /**

@@ -67,13 +67,12 @@ public abstract class AbstractEasyExcelDataListener extends AnalysisEventListene
         if(this.enableContent()){
             excelDto.getContent().add(responseRow);
         }
-        //  测试异常
-       /* if (rowIndex == 2) {
-            int a = 1 / 0;
-        }*/
         // 三千条数据 写入一次
         if (excelDto.getTmpContent().size() >= excelDto.getCount()) {
-            this.save(excelDto);//数据落库
+            if(!enableContent()){
+                excelDto.setContent(excelDto.getTmpContent());
+                this.save(excelDto);//数据落库
+            }
             excelWriter.write(excelDto.getTmpContent(), writeSheet);//写入新文件
             excelDto.getTmpContent().clear();
         }
@@ -91,6 +90,9 @@ public abstract class AbstractEasyExcelDataListener extends AnalysisEventListene
     @Override
     public void doAfterAllAnalysed(AnalysisContext analysisContext) {
         System.out.println("数据读取完毕");
+        if(!enableContent()){
+            excelDto.setContent(excelDto.getTmpContent());
+        }
         this.save(excelDto);//数据落库
         excelWriter.write(excelDto.getTmpContent(), writeSheet);//写入新文件
         excelDto.getTmpContent().clear();
