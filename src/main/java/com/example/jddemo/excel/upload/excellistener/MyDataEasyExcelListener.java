@@ -36,12 +36,6 @@ public class MyDataEasyExcelListener extends AbstractDataEasyExcelListener {
         }
     }
 
-    @Override
-    protected void saveFile(File tempFile) {
-        System.out.println("保存文件到文件服务器");
-        this.excelDto.setUrl("url://sdkjflkdsjf");
-    }
-
     /**
      * 数字类型  最多保留两位小数
      *

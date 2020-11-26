@@ -121,7 +121,10 @@ public abstract class AbstractDataEasyExcelListener extends AnalysisEventListene
      * 保存附件到服务器
      * @param tempFile
      */
-    protected abstract void saveFile(File tempFile);
+    protected  void saveFile(File tempFile){
+        System.out.println("保存文件到文件服务器");
+        this.excelDto.setUrl("url://文件服务器地址");
+    }
 
     /**
      * 行数据校验
