@@ -64,7 +64,9 @@ public abstract class AbstractDataEasyExcelListener extends AnalysisEventListene
         responseRow.add(0, msg.toString());
         excelDto.getTmpContent().add(responseRow);
         //保存全量数据  高并发或者数据量较大时不建议使用
-        excelDto.getSaveContent().add(responseRow);
+        if(this.enableContent()){
+            excelDto.getContent().add(responseRow);
+        }
         //  测试异常
        /* if (rowIndex == 2) {
             int a = 1 / 0;
@@ -75,6 +77,15 @@ public abstract class AbstractDataEasyExcelListener extends AnalysisEventListene
             excelWriter.write(excelDto.getTmpContent(), writeSheet);//写入新文件
             excelDto.getTmpContent().clear();
         }
+    }
+
+    /**
+     * 返回 true  ExcelDto content 会保存excel 中全量数据
+     * 返回 false ExcelDto content 不会保存数据
+     * @return
+     */
+    protected  boolean enableContent(){
+        return false;
     }
 
     @Override

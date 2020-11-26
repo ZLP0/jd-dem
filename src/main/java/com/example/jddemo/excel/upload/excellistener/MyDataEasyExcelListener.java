@@ -30,11 +30,15 @@ public class MyDataEasyExcelListener extends AbstractDataEasyExcelListener {
      */
     @Override
     protected void save(ExcelDto excelDto) {
-
+        if(excelDto.isHaveError()){
+            System.out.println("校验数据有错误信息  不执行数据库操作");
+            return;
+        }
     }
 
     @Override
     protected void saveFile(File tempFile) {
+        System.out.println("保存文件到文件服务器");
         this.excelDto.setUrl("url://sdkjflkdsjf");
     }
 

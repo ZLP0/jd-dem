@@ -2,11 +2,11 @@ package com.example.jddemo.response;
 
 public class ResponseEntity <T> {
 
-    private static  final   int  CODE_EXCEPTION=0;
+    public static  final   int  CODE_EXCEPTION=0;
 
-    private static final  int  CODE_NORMAL=1;
+    public static final  int  CODE_NORMAL=1;
 
-    private static  final int  CODE_WARN=2;
+    public static  final int  CODE_WARN=2;
 
 
     private String message;
