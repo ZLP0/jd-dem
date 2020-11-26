@@ -2,11 +2,10 @@ package com.example.jddemo.excel.upload.excellistener;
 
 import org.springframework.stereotype.Component;
 
-import java.io.File;
 import java.util.List;
 
 @Component
-public class MyDataEasyExcelListener extends AbstractDataEasyExcelListener {
+public class MyDataEasyExcelListener extends AbstractEasyExcelDataListener {
 
     @Override
     protected void validator(List<Object> row, StringBuilder msg) {

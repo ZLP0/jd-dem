@@ -10,7 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-public abstract class AbstractDataEasyExcelListener extends AnalysisEventListener<Map<Integer, String>> {
+public abstract class AbstractEasyExcelDataListener extends AnalysisEventListener<Map<Integer, String>> {
 
     protected   ExcelDto        excelDto    = new ExcelDto();
 
@@ -20,7 +20,7 @@ public abstract class AbstractDataEasyExcelListener extends AnalysisEventListene
     private     StringBuilder   msg         = null;// 行数据校验 提示信息
     private List<List<String>>  head        = new ArrayList<>();//生成动态表头
 
-    public AbstractDataEasyExcelListener() {
+    public AbstractEasyExcelDataListener() {
         //生成临时文件
         try {
             tempFile = File.createTempFile("test", ".xlsx");
