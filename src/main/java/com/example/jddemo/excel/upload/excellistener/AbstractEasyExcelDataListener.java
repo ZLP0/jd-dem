@@ -60,7 +60,6 @@ public abstract class AbstractEasyExcelDataListener extends AnalysisEventListene
         msg = new StringBuilder("");
         //校验数据
         this.validator(responseRow, msg);
-        //saveData.add(row);
         responseRow.add(0, msg.toString());
         excelDto.getTmpContent().add(responseRow);
         //保存全量数据  高并发或者数据量较大时不建议使用
@@ -93,10 +92,10 @@ public abstract class AbstractEasyExcelDataListener extends AnalysisEventListene
         if(!enableContent()){
             excelDto.setContent(excelDto.getTmpContent());
         }
-        this.save(excelDto);//数据落库
         excelWriter.write(excelDto.getTmpContent(), writeSheet);//写入新文件
-        excelDto.getTmpContent().clear();
         this.saveFile(tempFile);
+        this.save(excelDto);//数据落库
+        excelDto.getTmpContent().clear();//清除临时数据
         // 千万别忘记finish 会帮忙关闭流
         if (excelWriter != null) {
             excelWriter.finish();
@@ -116,7 +115,7 @@ public abstract class AbstractEasyExcelDataListener extends AnalysisEventListene
             tempFile.delete();
         }
         //手动抛出异常 读操作终止
-        throw new RuntimeException("运行时异常:" + exception.getMessage());
+        throw new RuntimeException("excel处理数据监听异常:" + exception.getMessage());
     }
 
     /**
