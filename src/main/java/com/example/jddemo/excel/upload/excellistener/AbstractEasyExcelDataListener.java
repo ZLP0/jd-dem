@@ -23,10 +23,10 @@ public abstract class AbstractEasyExcelDataListener extends AnalysisEventListene
     public AbstractEasyExcelDataListener() {
         //生成临时文件
         try {
-            tempFile = File.createTempFile("test", ".xlsx");
+            tempFile = File.createTempFile("tmp", ".xlsx");
             writeSheet = EasyExcel.writerSheet("模板").sheetNo(0).build();
             //写入临时文件
-            //excelWriter = EasyExcel.write(tempFile).head(headerror).build();
+            //excelWriter = EasyExcel.write(tempFile).head(head).build();
             excelWriter = EasyExcel.write("D:\\abc.xlsx").head(head).build();
             excelDto.setHead(head);
         } catch (IOException e) {
@@ -93,16 +93,22 @@ public abstract class AbstractEasyExcelDataListener extends AnalysisEventListene
             excelDto.setContent(excelDto.getTmpContent());
         }
         excelWriter.write(excelDto.getTmpContent(), writeSheet);//写入新文件
-        this.saveFile(tempFile);
-        this.save(excelDto);//数据落库
-        excelDto.getTmpContent().clear();//清除临时数据
         // 千万别忘记finish 会帮忙关闭流
         if (excelWriter != null) {
             excelWriter.finish();
         }
-        if (tempFile != null && tempFile.exists()) {
-            tempFile.delete();
+        this.save(excelDto);//数据落库
+        try {
+            this.saveFile(tempFile);
+            excelDto.getTmpContent().clear();//清除临时数据
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (tempFile != null && tempFile.exists()) {
+                tempFile.delete();
+            }
         }
+
     }
 
     @Override
