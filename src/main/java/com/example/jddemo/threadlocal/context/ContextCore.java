@@ -9,6 +9,7 @@ import java.util.UUID;
 
 public class ContextCore extends AbstractContextCore {
 
+    // 子线程不共享数据
     private ThreadLocal<Map<String, String>> local = new ThreadLocal<Map<String, String>>() {
         @Override
         protected Map<String, String> initialValue() {
