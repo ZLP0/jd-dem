@@ -1,5 +1,6 @@
 package com.example.jddemo.webcoket;
 
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -16,44 +17,36 @@ import java.util.concurrent.ConcurrentHashMap;
 @ServerEndpoint("/websocket/{sid}")
 public class WebSocketServerController {
 
-    // 保存 组id->组成员 的映射关系
-    private static ConcurrentHashMap<String, List<Session>> groupMemberInfoMap = new ConcurrentHashMap<>();
+    // 保存用户session id作为key
+    private static ConcurrentHashMap<String, Session> groupMemberInfoMap = new ConcurrentHashMap<>();
 
     // 收到消息调用的方法，群成员发送消息
     @OnMessage
-    public void onMessage(@PathParam("sid") String sid, String message) {
-        List<Session> sessionList = groupMemberInfoMap.get(sid);
-        // 先一个群组内的成员发送消息
-        sessionList.forEach(item -> {
-            try {
-                String text = ": " + message;
-                item.getBasicRemote().sendText(text);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+    public void onMessage(String protocolMsg) {
+        Protocol protocol = JSON.parseObject(protocolMsg, Protocol.class);
+        String receiveId = String.valueOf(protocol.getReceiveId());
+        Session session = groupMemberInfoMap.get(receiveId);
+        try {
+            session.getBasicRemote().sendText("用户" + protocol.getSendId() + ":" + protocol.getMsg());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    // 建立连接调用的方法，群成员加入
+    // 建立连接调用的方法，成员加入
     @OnOpen
     public void onOpen(Session session, @PathParam("sid") String sid) {
-        List<Session> sessionList = groupMemberInfoMap.get(sid);
-        if (sessionList == null) {
-            sessionList = new ArrayList<>();
-            groupMemberInfoMap.put(sid,sessionList);
-        }
-        sessionList.add(session);
+        groupMemberInfoMap.put(sid, session);
         System.out.println("Connection connected");
-        System.out.println("sid: {"+sid+"}sessionList size: {"+sessionList.size()+"}");
+        System.out.println("sid: {" + sid + "}sessionList size: {" + groupMemberInfoMap.size() + "}");
     }
 
-    // 关闭连接调用的方法，群成员退出
+    // 关闭连接调用的方法，成员退出
     @OnClose
     public void onClose(Session session, @PathParam("sid") String sid) {
-        List<Session> sessionList = groupMemberInfoMap.get(sid);
-        sessionList.remove(session);
+        groupMemberInfoMap.remove(session);
         System.out.println("Connection closed");
-        System.out.println("sid: {"+sid+"}sessionList size: {"+sessionList.size()+"}");
+        System.out.println("sid: {" + sid + "}sessionList size: {" + groupMemberInfoMap.size() + "}");
     }
 
     // 传输消息错误调用的方法
