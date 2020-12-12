@@ -2,17 +2,19 @@
 <html>
 <head>
     <title>Testing websockets</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 </head>
 <body>
 <div>
+    接收人id<input id="receiveId"><br>
     <textarea rows="3" cols="20" id="content"></textarea>
     <br>
     <input type="submit" value="Start" onclick="start()"/>
 </div>
 <div id="messages"></div>
 <script type="text/javascript">
-    //let id = Math.ceil(Math.random() * 10);
-    let id = 1;
+    let id = Math.ceil(Math.random() * 5);
+    //let id = 1;
     var webSocket = new WebSocket('ws://localhost:8082/websocket/' + id);
 
     webSocket.onerror = function (event) {
@@ -51,9 +53,16 @@
     }
 
     function start() {
-        var text = document.getElementById('content').value;
-        webSocket.send(text);
+        let text = document.getElementById('content').value;
+        let receiveId= document.getElementById('receiveId').value;
+        let protocolMsg = {
+            'sendId': id,
+            'receiveId': receiveId,
+            'msg':text
+        }
+        webSocket.send(JSON.stringify(protocolMsg));
     }
+
 </script>
 </body>
 </html>
