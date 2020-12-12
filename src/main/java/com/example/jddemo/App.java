@@ -12,18 +12,13 @@ public class App {
 
 
     public static void main(String[] args) {
-
         Person person = new Person();
         person.setName("张三");
         person.setAge(13);
         String s = JacksonUtils.toJson(person);
         System.out.println(s);
-
         Person person1 = JacksonUtils.fromIgnoreJson(s, Person.class);
-
         System.out.println(person1);
-        JacksonUtils.
-
     }
 
 
