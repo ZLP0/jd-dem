@@ -1,9 +1,11 @@
 package com.example.jddemo.jackson;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.lang3.time.DateUtils;
 
 public final class JacksonUtils {
 
@@ -13,9 +15,10 @@ public final class JacksonUtils {
     public static final ObjectMapper IGNORE_JSON_MAPPER;
 
     static {
-
+        JSON_MAPPER.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
         IGNORE_JSON_MAPPER = new ObjectMapper();
         IGNORE_JSON_MAPPER.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+        IGNORE_JSON_MAPPER.configure(com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_SINGLE_QUOTES, true);//单引号处理
     }
 
     /**
