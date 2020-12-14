@@ -34,13 +34,23 @@ public final class JacksonUtils {
      * @return json 字符串
      */
     public static String toJson(Object object) {
-
         try {
-
             return JSON_MAPPER.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-
             throw new RuntimeException("转换Json出错", e);
+        }
+    }
+    /**
+     * 将对象转为 json <br>
+     *
+     * @param object {@link Object}
+     * @return json 字符串
+     */
+    public static String toJsonNoException(Object object) {
+        try {
+            return JSON_MAPPER.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            return "";
         }
     }
 
