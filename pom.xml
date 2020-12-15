@@ -110,19 +110,24 @@
             <artifactId>iceworkday</artifactId>
             <version>2.0.2.0</version>
         </dependency>
+
+        <!-- pdf 相关 -->
         <dependency>
             <groupId>com.itextpdf</groupId>
             <artifactId>itext-asian</artifactId>
             <version>5.2.0</version>
         </dependency>
-
-        <!-- pdf 相关 -->
-
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>itextpdf</artifactId>
+            <version>5.5.13</version>
+        </dependency>
         <dependency>
             <groupId>com.itextpdf.tool</groupId>
             <artifactId>xmlworker</artifactId>
             <version>5.5.9</version>
         </dependency>
+        <!-- pdf 相关 -->
 
         <!--sentinel  限流 -->
         <dependency>
