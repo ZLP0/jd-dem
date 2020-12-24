@@ -24,11 +24,13 @@ public abstract class AbstractEasyExcelDataListener extends AnalysisEventListene
     public AbstractEasyExcelDataListener() {
 
     }
-    public void buildSheetName(String sheetName){
+    public AbstractEasyExcelDataListener buildSheetName(String sheetName){
         excelDto.setSheetName(sheetName);
+        return this;
     }
-    public void buildFileName(String  fileName){
+    public AbstractEasyExcelDataListener buildFileName(String  fileName){
         excelDto.setFileName(fileName);
+        return this;
     }
 
     public void open() {

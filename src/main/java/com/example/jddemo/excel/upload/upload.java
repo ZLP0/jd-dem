@@ -14,9 +14,11 @@ public class upload {
         response.setCode(ResponseEntity.CODE_NORMAL);
         ExcelDto excelDto = null;
         //创建监听器
-        AbstractEasyExcelDataListener listener = new MyDataEasyExcelListener();
-        try {
+        AbstractEasyExcelDataListener listener = new MyDataEasyExcelListener()
+                .buildFileName("文件名")
+                .buildSheetName("shee名");
 
+        try {
             listener.open();
             EasyExcel.read("D:\\1606185114659.xlsx").sheet().headRowNumber(1)
                     .registerReadListener(listener).doRead();
