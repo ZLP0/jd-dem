@@ -11,6 +11,8 @@ public class ExcelDto {
     private boolean            isHaveError;//默认false
     private int                count       = 3000;//三千条数据 提交一次
     private String             url;//文件上传后的地址
+    private String             fileName;//文件名
+    private String             sheetName;//sheet名
 
     public List<List<String>> getHead() {
         return head;
@@ -48,6 +50,23 @@ public class ExcelDto {
     public void setContent(List<List<Object>> content) {
         this.content = content;
     }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
+    }
+
+    public String getSheetName() {
+        return sheetName;
+    }
+
+    public void setSheetName(String sheetName) {
+        this.sheetName = sheetName;
+    }
+
     @Override
     public String toString() {
         return "ExcelDto{" +
