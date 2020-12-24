@@ -13,9 +13,11 @@ public class upload {
         ResponseEntity<String> response = new ResponseEntity<>();
         response.setCode(ResponseEntity.CODE_NORMAL);
         ExcelDto excelDto = null;
+        //创建监听器
+        AbstractEasyExcelDataListener listener = new MyDataEasyExcelListener();
         try {
-            //创建监听器
-            AbstractEasyExcelDataListener listener = new MyDataEasyExcelListener();
+
+            listener.open();
             EasyExcel.read("D:\\1606185114659.xlsx").sheet().headRowNumber(1)
                     .registerReadListener(listener).doRead();
             excelDto = listener.getExcelDto();
@@ -28,6 +30,8 @@ public class upload {
             response.setCode(ResponseEntity.CODE_WARN);
             response.setMessage(e.getMessage());
             response.setData(excelDto.getUrl());
+        }finally {
+            listener.close();
         }
     }
 
