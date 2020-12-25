@@ -1,10 +1,19 @@
 package com.example.jddemo.excel.upload.excellistener;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
+@Scope("prototype")// 开启多例   单例存在并发安全问题 [使用如下]
+/**
+ *     @Resource
+ *     private ObjectFactory<MyDataEasyExcelListener> obj;
+ *
+ *     使用: AbstractEasyExcelDataListener listener=obj.getObject();
+ */
 public class MyDataEasyExcelListener extends AbstractEasyExcelDataListener {
 
     @Override

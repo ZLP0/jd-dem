@@ -13,13 +13,13 @@ import java.util.*;
 
 public abstract class AbstractEasyExcelDataListener extends AnalysisEventListener<Map<Integer, String>> {
 
-    protected ExcelDto excelDto = new ExcelDto();
+    protected ExcelDto excelDto = null;
 
     private File tempFile = null;//临时文件
     private ExcelWriter excelWriter = null;
     private WriteSheet writeSheet = null;
     private StringBuilder msg = null;// 行数据校验 提示信息
-    private List<List<String>> head = new ArrayList<>();//生成动态表头
+    private List<List<String>> head =null;//生成动态表头
 
     public AbstractEasyExcelDataListener() {
 
@@ -36,6 +36,8 @@ public abstract class AbstractEasyExcelDataListener extends AnalysisEventListene
     public void open() {
         //生成临时文件
         try {
+            excelDto = new ExcelDto();
+            head = new ArrayList<>();
             tempFile = File.createTempFile("tmp", ".xlsx");
             writeSheet = EasyExcel.writerSheet(StringUtils.isBlank(excelDto.getSheetName())?"模板":excelDto.getSheetName()).sheetNo(0).build();
             //写入临时文件
