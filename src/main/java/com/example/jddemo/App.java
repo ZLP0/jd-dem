@@ -20,7 +20,7 @@ import java.util.AbstractList;
  **/
 public class App {
 
-//第一次提交
+//1
     public static void main(String[] args) {
 
     }
