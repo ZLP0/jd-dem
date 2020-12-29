@@ -50,4 +50,25 @@ https://cloud.tencent.com/developer/article/1445599
         <appender-ref ref="console"/>
         <appender-ref ref="timeFileOutput"/>
     </root>
+
+    <!--
+    #application.properties增加环境选择的配置active: dev
+    # 选择加载不同环境的配置文件 dev pre prod
+     spring.profiles.active=dev
+
+ -->
+    <!-- 测试环境+开发环境. 多个使用逗号隔开. -->
+    <springProfile name="test,dev">
+        <logger name="com.example.jddemo" level="DEBUG" additivity="false">
+            <appender-ref ref="console"/>
+        </logger>
+    </springProfile>
+    <!-- 生产环境. -->
+    <springProfile name="prod">
+        <logger name="com.example.jddemo" level="INFO" additivity="false">
+            <appender-ref ref="timeFileOutput"/>
+        </logger>
+    </springProfile>
+
+
 </configuration>
