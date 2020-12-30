@@ -1,7 +1,6 @@
 package com.example.jddemo.excel.upload.excellistener;
 
 import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,7 +22,7 @@ public class MyDataEasyExcelListener extends AbstractEasyExcelDataListener {
         if (!isNumber(number.toString(), 2)) {
             // System.out.println(number + "不是数字");
             msg.append(number + "不是数字");
-            excelDto.setHaveError(true);
+            excelHelper.setHaveError(true);
         }
         //校验 。。。。。。。。。
         if (true) {
@@ -34,15 +33,15 @@ public class MyDataEasyExcelListener extends AbstractEasyExcelDataListener {
     /**
      * 保存数据库
      *
-     * @param excelDto
+     * @param excelHelper
      */
     @Override
-    protected void save(ExcelDto excelDto) {
-        if(excelDto.isHaveError()){
+    protected void save(ExcelHelper excelHelper) {
+        if(excelHelper.isHaveError()){
             System.out.println("校验数据有错误信息  不执行数据库操作");
             return;
         }
-        List<List<Object>> content = excelDto.getContent();
+        List<List<Object>> content = excelHelper.getContent();
         System.out.println("保存的数据:"+content);
     }
 

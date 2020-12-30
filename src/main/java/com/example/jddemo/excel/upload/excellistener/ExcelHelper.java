@@ -3,7 +3,7 @@ package com.example.jddemo.excel.upload.excellistener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExcelDto {
+public class ExcelHelper {
 
     private List<List<String>> head        = new ArrayList<>();//表头
     private List<List<Object>> tmpContent  = new ArrayList<>();//临时数据

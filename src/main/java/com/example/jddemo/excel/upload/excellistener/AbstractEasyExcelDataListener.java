@@ -13,7 +13,7 @@ import java.util.*;
 
 public abstract class AbstractEasyExcelDataListener extends AnalysisEventListener<Map<Integer, String>> {
 
-    protected ExcelDto excelDto = null;
+    protected ExcelHelper excelHelper = null;
 
     private File tempFile = null;//临时文件
     private ExcelWriter excelWriter = null;
@@ -25,25 +25,25 @@ public abstract class AbstractEasyExcelDataListener extends AnalysisEventListene
 
     }
     public AbstractEasyExcelDataListener buildSheetName(String sheetName){
-        excelDto.setSheetName(sheetName);
+        excelHelper.setSheetName(sheetName);
         return this;
     }
     public AbstractEasyExcelDataListener buildFileName(String  fileName){
-        excelDto.setFileName(fileName);
+        excelHelper.setFileName(fileName);
         return this;
     }
 
     public void open() {
         //生成临时文件
         try {
-            excelDto = new ExcelDto();
+            excelHelper = new ExcelHelper();
             head = new ArrayList<>();
             tempFile = File.createTempFile("tmp", ".xlsx");
-            writeSheet = EasyExcel.writerSheet(StringUtils.isBlank(excelDto.getSheetName())?"模板":excelDto.getSheetName()).sheetNo(0).build();
+            writeSheet = EasyExcel.writerSheet(StringUtils.isBlank(excelHelper.getSheetName())?"模板": excelHelper.getSheetName()).sheetNo(0).build();
             //写入临时文件
             //excelWriter = EasyExcel.write(tempFile).head(head).build();
             excelWriter = EasyExcel.write("D:\\abc.xlsx").head(head).build();
-            excelDto.setHead(head);
+            excelHelper.setHead(head);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -76,19 +76,19 @@ public abstract class AbstractEasyExcelDataListener extends AnalysisEventListene
         //校验数据
         this.validator(responseRow, msg);
         responseRow.add(0, msg.toString());
-        excelDto.getTmpContent().add(responseRow);
+        excelHelper.getTmpContent().add(responseRow);
         //保存全量数据  高并发或者数据量较大时不建议使用
         if (this.enableContent()) {
-            excelDto.getContent().add(responseRow);
+            excelHelper.getContent().add(responseRow);
         }
         // 三千条数据 写入一次
-        if (excelDto.getTmpContent().size() >= excelDto.getCount()) {
+        if (excelHelper.getTmpContent().size() >= excelHelper.getCount()) {
             if (!enableContent()) {
-                excelDto.setContent(excelDto.getTmpContent());
-                this.save(excelDto);//数据落库
+                excelHelper.setContent(excelHelper.getTmpContent());
+                this.save(excelHelper);//数据落库
             }
-            excelWriter.write(excelDto.getTmpContent(), writeSheet);//写入新文件
-            excelDto.getTmpContent().clear();
+            excelWriter.write(excelHelper.getTmpContent(), writeSheet);//写入新文件
+            excelHelper.getTmpContent().clear();
         }
     }
 
@@ -106,16 +106,16 @@ public abstract class AbstractEasyExcelDataListener extends AnalysisEventListene
     public void doAfterAllAnalysed(AnalysisContext analysisContext) {
         System.out.println("数据读取完毕");
         if (!enableContent()) {
-            excelDto.setContent(excelDto.getTmpContent());
+            excelHelper.setContent(excelHelper.getTmpContent());
         }
-        excelWriter.write(excelDto.getTmpContent(), writeSheet);//写入新文件
+        excelWriter.write(excelHelper.getTmpContent(), writeSheet);//写入新文件
         // 千万别忘记finish 会帮忙关闭流
         if (excelWriter != null) {
             excelWriter.finish();
         }
-        this.save(excelDto);//数据落库
+        this.save(excelHelper);//数据落库
         this.saveFile(tempFile);// 保存临时文件 到服务器
-        excelDto.getTmpContent().clear();//清除临时数据
+        excelHelper.getTmpContent().clear();//清除临时数据
     }
 
     @Override
@@ -131,7 +131,7 @@ public abstract class AbstractEasyExcelDataListener extends AnalysisEventListene
      */
     protected void saveFile(File tempFile) {
         System.out.println("保存文件到文件服务器");
-        this.excelDto.setUrl("url://文件服务器地址");
+        this.excelHelper.setUrl("url://文件服务器地址");
     }
 
     public void close() {
@@ -156,16 +156,16 @@ public abstract class AbstractEasyExcelDataListener extends AnalysisEventListene
     /**
      * 数据库操作  保存数据
      *
-     * @param excelDto
+     * @param excelHelper
      */
-    protected abstract void save(ExcelDto excelDto);
+    protected abstract void save(ExcelHelper excelHelper);
 
-    public ExcelDto getExcelDto() {
-        return excelDto;
+    public ExcelHelper getExcelHelper() {
+        return excelHelper;
     }
 
-    public void setExcelDto(ExcelDto excelDto) {
-        this.excelDto = excelDto;
+    public void setExcelHelper(ExcelHelper excelHelper) {
+        this.excelHelper = excelHelper;
     }
 
 }
