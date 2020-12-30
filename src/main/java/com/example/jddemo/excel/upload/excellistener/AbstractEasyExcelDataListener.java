@@ -13,7 +13,7 @@ import java.util.*;
 
 public abstract class AbstractEasyExcelDataListener extends AnalysisEventListener<Map<Integer, String>> {
 
-    protected ExcelHelper excelHelper = null;
+    private ExcelHelper excelHelper =  new ExcelHelper();
 
     private File tempFile = null;//临时文件
     private ExcelWriter excelWriter = null;
@@ -36,7 +36,6 @@ public abstract class AbstractEasyExcelDataListener extends AnalysisEventListene
     public void open() {
         //生成临时文件
         try {
-            excelHelper = new ExcelHelper();
             head = new ArrayList<>();
             tempFile = File.createTempFile("tmp", ".xlsx");
             writeSheet = EasyExcel.writerSheet(StringUtils.isBlank(excelHelper.getSheetName())?"模板": excelHelper.getSheetName()).sheetNo(0).build();
@@ -162,10 +161,6 @@ public abstract class AbstractEasyExcelDataListener extends AnalysisEventListene
 
     public ExcelHelper getExcelHelper() {
         return excelHelper;
-    }
-
-    public void setExcelHelper(ExcelHelper excelHelper) {
-        this.excelHelper = excelHelper;
     }
 
 }
