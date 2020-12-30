@@ -22,7 +22,8 @@ public class MyDataEasyExcelListener extends AbstractEasyExcelDataListener {
         if (!isNumber(number.toString(), 2)) {
             // System.out.println(number + "不是数字");
             msg.append(number + "不是数字");
-            excelHelper.setHaveError(true);
+
+            getExcelHelper().setHaveError(true);
         }
         //校验 。。。。。。。。。
         if (true) {
