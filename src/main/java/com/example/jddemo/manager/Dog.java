@@ -3,7 +3,7 @@ package com.example.jddemo.manager;
 import org.springframework.stereotype.Component;
 
 @Component
-public class Dog extends Animal {
+public class Dog extends AbstractAnimal {
 
 
 
@@ -11,4 +11,8 @@ public class Dog extends Animal {
         super(ActionType.ADD);
     }
 
+    @Override
+    public String getModule() {
+        return AnimalModule.MODULE_DOG;
+    }
 }
