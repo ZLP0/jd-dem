@@ -1,8 +1,5 @@
 package com.example.jddemo.threadlocal.context;
 
-import com.example.jddemo.threadlocal.context.AbstractContextCore;
-import org.apache.dubbo.common.threadlocal.InternalThreadLocal;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
