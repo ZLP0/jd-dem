@@ -9,3 +9,9 @@
 *.iws
 target/
 log/
+.mvn/
+HELP.md
+mvnw
+mvnw.cmd
+your api docs path/
+
