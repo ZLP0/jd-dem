@@ -6,7 +6,7 @@ public class ResponseEntity <T> {
 
     public static final  int  CODE_NORMAL=1;
 
-    public static  final int  CODE_WARN=2;
+    public static  final int  CODE_WARN=-2;
 
 
     private String message;
@@ -16,7 +16,10 @@ public class ResponseEntity <T> {
     private int code;
 
     public ResponseEntity( ) {
-
+        init(CODE_NORMAL);
+    }
+    public void init(int code){
+        this.code=code;
     }
 
     public String getMessage() {
