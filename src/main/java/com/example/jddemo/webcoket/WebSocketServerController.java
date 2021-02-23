@@ -1,6 +1,6 @@
 package com.example.jddemo.webcoket;
 
-import com.alibaba.fastjson.JSON;
+import com.example.jddemo.jackson.JacksonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
@@ -8,8 +8,6 @@ import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
@@ -23,7 +21,8 @@ public class WebSocketServerController {
     // 收到消息调用的方法，群成员发送消息
     @OnMessage
     public void onMessage(String protocolMsg) {
-        Protocol protocol = JSON.parseObject(protocolMsg, Protocol.class);
+        //  Protocol protocol = JSON.parseObject(protocolMsg, Protocol.class);
+        Protocol protocol = JacksonUtils.fromIgnoreJson(protocolMsg, Protocol.class);
         String receiveId = String.valueOf(protocol.getReceiveId());
         Session session = groupMemberInfoMap.get(receiveId);
         try {

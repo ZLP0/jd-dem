@@ -5,7 +5,6 @@ package com.example.jddemo.redis.limit;
  * time  2021-02-23
  **/
 
-import com.alibaba.fastjson.JSON;
 import com.example.jddemo.response.ResponseEntity;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -16,6 +15,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
+import java.util.Set;
 
 @Component
 public class FangshuaInterceptor extends HandlerInterceptorAdapter {
@@ -50,7 +50,7 @@ public class FangshuaInterceptor extends HandlerInterceptorAdapter {
             //从redis中获取用户访问的次数
            // AccessKey ak = AccessKey.withExpire(seconds);
             Integer count =1 ;//redisTemplate.get(ak,key,Integer.class);
-            redisTemplate.keys(key);
+            Set keys = redisTemplate.keys(key);
             if(count == null){
                 //第一次访问
                // redisTemplate.set(ak,key,1);
@@ -70,7 +70,7 @@ public class FangshuaInterceptor extends HandlerInterceptorAdapter {
     private void render(HttpServletResponse response, ResponseEntity<String> cm)throws Exception {
         response.setContentType("application/json;charset=UTF-8");
         OutputStream out = response.getOutputStream();
-        String str  = JSON.toJSONString("");
+        String str  = "";
         out.write(str.getBytes("UTF-8"));
         out.flush();
         out.close();
