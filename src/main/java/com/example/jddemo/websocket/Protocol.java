@@ -1,4 +1,4 @@
-package com.example.jddemo.webcoket;
+package com.example.jddemo.websocket;
 
 import java.io.Serializable;
 
