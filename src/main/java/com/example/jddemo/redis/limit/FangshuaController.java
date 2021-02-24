@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class FangshuaController {
 
-    @AccessLimit(seconds=5, maxCount=5, needLogin=true)
+    @AccessLimit(seconds=10, maxCount=2, needLogin=true)
     @RequestMapping("/fangshua")
     @ResponseBody
     public ResponseEntity<String> fangshua(){

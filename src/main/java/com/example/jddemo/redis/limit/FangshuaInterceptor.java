@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.OutputStream;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class FangshuaInterceptor extends HandlerInterceptorAdapter {
@@ -48,15 +49,17 @@ public class FangshuaInterceptor extends HandlerInterceptorAdapter {
             }
 
             //从redis中获取用户访问的次数
-           // AccessKey ak = AccessKey.withExpire(seconds);
-            Integer count =1 ;//redisTemplate.get(ak,key,Integer.class);
-            Set keys = redisTemplate.keys(key);
+            //AccessKey ak = AccessKey.withExpire(seconds);
+            key="key";
+            Integer count = (Integer)redisTemplate.opsForValue().get(key);
+            //Integer count =1 ;
             if(count == null){
                 //第一次访问
                // redisTemplate.set(ak,key,1);
+                redisTemplate.opsForValue().set(key,1,seconds, TimeUnit.SECONDS);
             }else if(count < maxCount){
                 //加1
-               // redisService.incr(ak,key);
+                redisTemplate.opsForValue().increment(key);
             }else{
                 //超出访问次数
                 render(response,new ResponseEntity<>()); //这里的CodeMsg是一个返回参数
@@ -70,7 +73,7 @@ public class FangshuaInterceptor extends HandlerInterceptorAdapter {
     private void render(HttpServletResponse response, ResponseEntity<String> cm)throws Exception {
         response.setContentType("application/json;charset=UTF-8");
         OutputStream out = response.getOutputStream();
-        String str  = "";
+        String str  = "哎呀 访问频率过快";
         out.write(str.getBytes("UTF-8"));
         out.flush();
         out.close();
