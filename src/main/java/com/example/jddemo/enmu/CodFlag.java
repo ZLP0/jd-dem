@@ -16,7 +16,7 @@ public enum CodFlag {
 
     public static CodFlag getItemBycode(Integer code) {
         for (CodFlag item : values()) {
-            if (item.code == code) {
+            if (item.code.equals(code)) {
                 return item;
             }
         }
@@ -25,7 +25,7 @@ public enum CodFlag {
 
     public static String getTextBycode(Integer code) {
         for (CodFlag item : values()) {
-            if (item.code == code) {
+            if (item.code.equals(code)) {
                 return item.text;
             }
         }

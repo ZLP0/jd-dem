@@ -1,4 +1,4 @@
-package com.example.jddemo.webcoket;
+package com.example.jddemo.websocket;
 
 import com.example.jddemo.jackson.JacksonUtils;
 import lombok.extern.slf4j.Slf4j;
