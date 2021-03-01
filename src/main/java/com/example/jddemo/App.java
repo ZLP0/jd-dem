@@ -1,6 +1,6 @@
 package com.example.jddemo;
 
-import com.example.jddemo.enmu.CodFlag;
+import org.apache.poi.ss.usermodel.DataFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 程序员  by dell
@@ -26,32 +26,46 @@ public class App {
 
     ExecutorService executor = Executors.newFixedThreadPool(1);
 
+    static ReentrantLock lock = new ReentrantLock(true);
+
+    static  int count=1;
+
     public static void main(String[] args) {
+
+
+        new  Thread(()->{
+            while (true){
+
+                System.out.println("count:"+count);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                count++;
+                if(count==5){
+                    Thread.currentThread().interrupt();
+                    System.out.println("中断表后："+  Thread.interrupted());
+                    System.out.println("中断表示："+  Thread.interrupted());
+                }
+            }
+        }).start();
+
 
     }
 
     @RequestMapping(value = "/thread")
-    public void testThread(String  str){
-
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                System.out.println("线程："+str);
-                try {
-                    Thread.sleep(20000);
-                } catch (InterruptedException e) {
-
-                }
-                System.out.println("线程执行结束："+str);
-            }
-        });
-    }
-    public  void thread(String str){
+    public void testThread(String str) {
 
 
     }
 
-    public void  date(){
+    public void thread(String str) {
+
+
+    }
+
+    public void date() {
         LocalDate localDate = LocalDate.of(2021, 2, 2);
         ZoneId zone = ZoneId.systemDefault();
         Instant instant = localDate.atStartOfDay().atZone(zone).toInstant();

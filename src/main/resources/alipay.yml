@@ -1,0 +1,11 @@
+alipay:
+  protocol: https
+  # 不需要加/gateway.do，这是新旧SDK的区别，切记
+  gatewayHost: openapi.alipaydev.com
+  signType: RSA2
+  # 填APPID
+  appId: 2016102600762651
+  # 填应用私钥，注意是应用私钥，不要填成公钥了_(:з」∠)_
+  merchantPrivateKey: MIIE.....
+  # 填支付宝公钥，注意不是生成的应用公钥
+  alipayPublicKey: MIIBIjAN......
