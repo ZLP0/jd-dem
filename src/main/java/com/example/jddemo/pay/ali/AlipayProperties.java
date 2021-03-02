@@ -1,14 +1,18 @@
 package com.example.jddemo.pay.ali;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 @Component
+@PropertySource(value = {"classpath:application-pay.properties"})
 @ConfigurationProperties(prefix = "alipay")
 public class AlipayProperties {
     /**
      * 应用识别码
      */
+    @Value("appId")
     private String appId;
     /**
      * 网关协议

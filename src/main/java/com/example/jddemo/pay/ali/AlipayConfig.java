@@ -9,22 +9,24 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AlipayConfig {
 
+    @Autowired
+    AlipayProperties  alipayProperties;
+
     @Bean
-    public Config getConfig(@Autowired AlipayProperties properties) {
+    public Config getConfig() {
         Config config = new Config();
         // 网关协议
-        config.protocol = properties.getProtocol().trim();
+        config.protocol = alipayProperties.getProtocol().trim();
         // 网关地址
-        config.gatewayHost = properties.getGatewayHost().trim();
+        config.gatewayHost = alipayProperties.getGatewayHost().trim();
         // 密钥加密方式
-        config.signType = properties.getSignType().trim();
-
+        config.signType = alipayProperties.getSignType().trim();
         // 应用识别码APPID
-        config.appId = properties.getAppId().trim();
+        config.appId = alipayProperties.getAppId().trim();
         // 应用私钥
-        config.merchantPrivateKey = properties.getMerchantPrivateKey().trim();
+        config.merchantPrivateKey = alipayProperties.getMerchantPrivateKey().trim();
         // 支付宝公钥
-        config.alipayPublicKey = properties.getAlipayPublicKey().trim();
+        config.alipayPublicKey = alipayProperties.getAlipayPublicKey().trim();
 
         // Factory全局只需配置一次
         Factory.setOptions(config);

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
  * 修改redis server 配置文件，开启keyt过期听通知配置
  * notify-keyspace-events Ex
  */
-@Component
+//@Component
 public class RedisKeyExpirationListener extends KeyExpirationEventMessageListener {
 
     public RedisKeyExpirationListener(RedisMessageListenerContainer listenerContainer) {

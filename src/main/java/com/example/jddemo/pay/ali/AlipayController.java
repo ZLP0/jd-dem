@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,10 +20,11 @@ public class AlipayController {
 
     // 电脑网页支付
     @GetMapping("/page")
-    public Map<String, Object> pagePay() {
+    public void  pagePay(HttpServletResponse response) {
         try {
+            response.setContentType("text/html;charset=UTF-8");
             // Payment.Page就是电脑网页支付的封装接口
-            AlipayTradePagePayResponse response = Factory.Payment.Page()
+            AlipayTradePagePayResponse payResponse = Factory.Payment.Page()
                     .pay(
                             // 商品名
                             "来撒钱吧大兄弟",
@@ -31,9 +33,10 @@ public class AlipayController {
                             // 金额，精确到小数点后两位，范围为[0.01,9999999999999.99]
                             "9999.99",
                             // 付款完成后跳转网页，这里只是演示，我随便填的
-                            "www.bilibili.com"
+                            "182.92.97.65"
                     );
-            return wrap(response.getBody());
+            response.getWriter().write(payResponse.getBody());
+            response.getWriter().flush();
         } catch (Exception e) {
             log.warn("调用异常，原因：{}", e.getMessage());
             throw new RuntimeException(e.getMessage(), e);
@@ -43,10 +46,10 @@ public class AlipayController {
 
     // 手机网页支付
     @GetMapping("/wap")
-    public Map<String, Object> wapPay() {
+    public  Map<String, Object>  wapPay(HttpServletResponse response) {
         try {
             // Payment.Wap就是手机网页支付的封装接口，注意他们的返回类型是不一样的
-            AlipayTradeWapPayResponse response = Factory.Payment.Wap()
+            AlipayTradeWapPayResponse payResponse = Factory.Payment.Wap()
                     .pay(
                             // 商品名
                             "来继续撒",
@@ -59,7 +62,8 @@ public class AlipayController {
                             // 完成支付后返回的网址
                             "www.bilibili.com"
                     );
-            return wrap(response.getBody());
+
+           return wrap(payResponse.getBody());
         } catch (Exception e) {
             log.warn("调用异常，原因：{}", e.getMessage());
             throw new RuntimeException(e.getMessage(), e);
