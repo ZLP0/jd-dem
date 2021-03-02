@@ -1,12 +1,6 @@
 package com.example.jddemo.response;
 
-public class ResponseEntity <T> {
-
-    public static  final   int  CODE_EXCEPTION=0;
-
-    public static final  int  CODE_NORMAL=1;
-
-    public static  final int  CODE_WARN=-2;
+public abstract class AbstractResponse<T> {
 
 
     private String message;
@@ -14,13 +8,6 @@ public class ResponseEntity <T> {
     private T Data;
 
     private int code;
-
-    public ResponseEntity( ) {
-        init(CODE_NORMAL);
-    }
-    public void init(int code){
-        this.code=code;
-    }
 
     public String getMessage() {
         return message;

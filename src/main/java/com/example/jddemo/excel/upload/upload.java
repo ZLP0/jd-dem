@@ -4,14 +4,14 @@ import com.alibaba.excel.EasyExcel;
 import com.example.jddemo.excel.upload.excellistener.AbstractEasyExcelDataListener;
 import com.example.jddemo.excel.upload.excellistener.ExcelHelper;
 import com.example.jddemo.excel.upload.excellistener.MyDataEasyExcelListener;
-import com.example.jddemo.response.ResponseEntity;
+import com.example.jddemo.response.CommonResponse;
 
 public class upload {
 
     public static void main(String[] args) {
 
-        ResponseEntity<String> response = new ResponseEntity<>();
-        response.setCode(ResponseEntity.CODE_NORMAL);
+        CommonResponse<String> response = new CommonResponse<>();
+        response.setCode(CommonResponse.CODE_NORMAL);
         ExcelHelper excelHelper = null;
         //创建监听器
         AbstractEasyExcelDataListener listener = new MyDataEasyExcelListener()
@@ -29,7 +29,7 @@ public class upload {
             System.out.println(excelHelper);
         } catch (RuntimeException e) {
             e.printStackTrace();
-            response.setCode(ResponseEntity.CODE_WARN);
+            response.setCode(CommonResponse.CODE_WARN);
             response.setMessage(e.getMessage());
             response.setData(excelHelper.getUrl());
         }finally {
