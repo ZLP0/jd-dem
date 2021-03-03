@@ -1,15 +1,26 @@
 package com.example.jddemo;
 
+import com.example.jddemo.pay.request.PaymentRequest;
+import com.example.jddemo.pay.service.PayCoreService;
+import com.example.jddemo.pay.service.impl.PaymentFactory;
+import com.example.jddemo.response.CommonResponse;
+import com.example.jddemo.response.PaymentResponse;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.SortedMap;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.locks.ReentrantLock;
@@ -28,35 +39,31 @@ public class App {
 
     static ReentrantLock lock = new ReentrantLock(true);
 
-    static  int count=1;
+    static int count = 1;
+
+    @Resource
+    private PayCoreService payCoreService;
 
     public static void main(String[] args) {
 
-
-        new  Thread(()->{
-            while (true){
-
-                System.out.println("count:"+count);
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                count++;
-                if(count==5){
-                    Thread.currentThread().interrupt();
-                    System.out.println("中断表后："+  Thread.interrupted());
-                    System.out.println("中断表示："+  Thread.interrupted());
-                }
-            }
-        }).start();
-
-
+        PaymentFactory instance = PaymentFactory.getInstance();
+        System.out.println(instance);
     }
 
-    @RequestMapping(value = "/thread")
-    public void testThread(String str) {
+    @RequestMapping(value = "/payTest")
+    public void testThread(HttpServletResponse response) throws IOException {
 
+        response.setContentType("text/html;charset=UTF-8");
+        PaymentRequest paymentRequest = new PaymentRequest();
+        paymentRequest.setPayChannel("ali_pay");
+        paymentRequest.setSubject("iphone12");
+        paymentRequest.setTradeNo(UUID.randomUUID().toString());
+        paymentRequest.setTotalFee(new BigDecimal(100));
+        CommonResponse<PaymentResponse> objectCommonResponse = payCoreService.execPay(paymentRequest);
+
+        System.out.println(objectCommonResponse);
+        response.getWriter().write(objectCommonResponse.getData().getHtmlStr());
+        response.getWriter().flush();
 
     }
 

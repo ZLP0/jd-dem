@@ -35,6 +35,6 @@ public class AnimalFactory {
             throw new IllegalArgumentException(" key 已存在");
         }
         temp.put(String.valueOf(type.getCode()), obj);
-        this.data = temp;
+        data = temp;
     }
 }
