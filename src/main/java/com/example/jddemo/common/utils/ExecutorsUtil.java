@@ -27,7 +27,7 @@ public class ExecutorsUtil extends ThreadPoolExecutor {
      * @param unit            空闲时间的单位
      * @param workQueue       保存被提交任务的队列
      * @param poolName        线程池名称
-     * new ExecutorsUtil(corePoolSize,2*corePoolSize, 0,TimeUnit.SECONDS,new LinkedBlockingQueue<>(),"线程池名称");
+     * new ExecutorsUtil(corePoolSize,2*corePoolSize, 0,TimeUnit.SECONDS,new LinkedBlockingQueue<>(corePoolSize),"线程池名称");
      */
     public ExecutorsUtil(int corePoolSize, int maximumPoolSize, long keepAliveTime, TimeUnit unit, BlockingQueue workQueue,
                          String poolName) {
