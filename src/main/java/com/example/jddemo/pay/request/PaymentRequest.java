@@ -57,6 +57,12 @@ public class PaymentRequest extends AbstractRequest {
      */
     //@PayChannel
     private String payChannel;
+
+    /**
+     * 支付类别  app  网页  H5  ...
+     */
+    //@NotBlank(message = "支付类别 不能为空")
+    private String  payType;
     /**
      * 地址id
      */

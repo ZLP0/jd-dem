@@ -1,6 +1,6 @@
 package com.example.jddemo.pay.validatorextend;
 
-import com.example.jddemo.pay.constants.PayChannelEnum;
+import com.example.jddemo.pay.constants.PayEnum;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -22,6 +22,6 @@ public class PayChannelValidator implements ConstraintValidator<PayChannel, Stri
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        return PayChannelEnum.isExists(value);
+        return PayEnum.isExists(value);
     }
 }
