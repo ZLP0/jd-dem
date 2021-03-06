@@ -1,5 +1,6 @@
 package com.example.jddemo.pay.ali;
 
+import com.aliyun.tea.NameInMap;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
@@ -34,6 +35,20 @@ public class AlipayProperties {
      * 公钥
      */
     private String alipayPublicKey;
+
+    /**
+     * 异步回调地址
+     */
+    private String notifyUrl;
+
+    /**
+     * 证书路径
+     */
+    public String merchantCertPath;
+    /**
+     * 证书路径
+     */
+    public String alipayCertPath;
 
     public String getAppId() {
         return appId;
@@ -81,5 +96,29 @@ public class AlipayProperties {
 
     public void setAlipayPublicKey(String alipayPublicKey) {
         this.alipayPublicKey = alipayPublicKey;
+    }
+
+    public String getNotifyUrl() {
+        return notifyUrl;
+    }
+
+    public void setNotifyUrl(String notifyUrl) {
+        this.notifyUrl = notifyUrl;
+    }
+
+    public String getMerchantCertPath() {
+        return merchantCertPath;
+    }
+
+    public void setMerchantCertPath(String merchantCertPath) {
+        this.merchantCertPath = merchantCertPath;
+    }
+
+    public String getAlipayCertPath() {
+        return alipayCertPath;
+    }
+
+    public void setAlipayCertPath(String alipayCertPath) {
+        this.alipayCertPath = alipayCertPath;
     }
 }

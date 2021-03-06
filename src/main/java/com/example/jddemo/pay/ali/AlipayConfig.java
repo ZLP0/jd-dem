@@ -27,6 +27,8 @@ public class AlipayConfig {
         config.merchantPrivateKey = alipayProperties.getMerchantPrivateKey().trim();
         // 支付宝公钥
         config.alipayPublicKey = alipayProperties.getAlipayPublicKey().trim();
+        //支付宝异步回调
+        config.notifyUrl=alipayProperties.getNotifyUrl();
 
         // Factory全局只需配置一次
         Factory.setOptions(config);

@@ -33,7 +33,7 @@ public class AliPaymentPage extends AbstractPaymentTypes {
                             // 金额，精确到小数点后两位，范围为[0.01,9999999999999.99]
                             paymentRequest.getTotalFee().toString(),
                             // 付款完成后跳转网页，这里只是演示，我随便填的
-                            "http://182.92.97.65:8082/notify"
+                            "http://localhost:8082/notify"
                     );
         } catch (Exception e) {
             e.printStackTrace();
