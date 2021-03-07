@@ -50,10 +50,11 @@ public class App {
 
         response.setContentType("text/html;charset=UTF-8");
         PaymentRequest paymentRequest = new PaymentRequest();
-        paymentRequest.setPayChannel("ali_pay");
-        paymentRequest.setPayType("ali_pay_page");
+        paymentRequest.setPayChannel("wechat_pay");
+       // paymentRequest.setPayType("ali_pay_page");
         paymentRequest.setSubject("iphone13");
-        paymentRequest.setTradeNo(UUID.randomUUID().toString());
+       // paymentRequest.setTradeNo(UUID.randomUUID().toString());
+        paymentRequest.setTradeNo("1233");
         paymentRequest.setTotalFee(new BigDecimal(101));
         logger.info("订单号：======================：" + paymentRequest.getTradeNo());
         CommonResponse<PaymentResponse> objectCommonResponse = payCoreService.execPay(paymentRequest);

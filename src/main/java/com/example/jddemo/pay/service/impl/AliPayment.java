@@ -1,6 +1,6 @@
 package com.example.jddemo.pay.service.impl;
 
-import com.example.jddemo.pay.constants.PayEnum;
+import com.example.jddemo.pay.enums.PayEnum;
 import com.example.jddemo.pay.context.AliPaymentContext;
 import com.example.jddemo.pay.context.Context;
 import com.example.jddemo.pay.request.AbstractRequest;

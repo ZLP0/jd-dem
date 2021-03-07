@@ -1,6 +1,6 @@
 package com.example.jddemo.pay.validatorextend;
 
-import com.example.jddemo.pay.constants.PayEnum;
+import com.example.jddemo.pay.enums.PayEnum;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

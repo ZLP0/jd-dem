@@ -1,4 +1,4 @@
-package com.example.jddemo.pay.constants;
+package com.example.jddemo.pay.enums;
 
 
 /**
@@ -12,7 +12,9 @@ public enum PayEnum {
     WECHAT_REFUND("wechat_refund", "微信退款渠道"),
 
     ALI_PAY_PAGE("ali_pay_page", "支付宝网页端"),
-    ALI_PAY_WAP("ali_pay_wap", "支付宝手机端");
+    ALI_PAY_WAP("ali_pay_wap", "支付宝手机端"),
+
+    NATIVE("NATIVE","微信原生扫码支付");
 
 
     private String code;

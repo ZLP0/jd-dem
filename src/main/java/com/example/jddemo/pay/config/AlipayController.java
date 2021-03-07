@@ -1,4 +1,4 @@
-package com.example.jddemo.pay.ali;
+package com.example.jddemo.pay.config;
 
 import com.alipay.easysdk.factory.Factory;
 import com.alipay.easysdk.payment.page.models.AlipayTradePagePayResponse;

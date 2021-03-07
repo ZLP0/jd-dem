@@ -1,6 +1,5 @@
-package com.example.jddemo.pay.ali;
+package com.example.jddemo.pay.config;
 
-import com.aliyun.tea.NameInMap;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
