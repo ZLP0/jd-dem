@@ -41,7 +41,7 @@ public class App {
     private PayCoreService payCoreService;
 
     public static void main(String[] args) {
-
+        System.out.println("1");
 
     }
 
