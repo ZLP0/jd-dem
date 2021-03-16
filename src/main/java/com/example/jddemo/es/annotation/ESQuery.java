@@ -23,8 +23,13 @@ public @interface ESQuery {
         public static final String TERM = "term";//精确查询
         public static final String TERMS = "terms";//精确查询 数组
 
-        public static final String RANGE_FROM = "rangeFrom";//区间查询 start
-        public static final String RANGE_TO = "rangeTo";//区间查询 end
+        public static final String RANGE_FROM = "range_from";//区间查询 start   大于等于
+        public static final String RANGE_TO = "range_to";//区间查询 end         小于等于
+
+        public static final String WILD_CARD_LEFT = "wild_card_left";// 通配符 模糊查询   左模糊
+        public static final String WILD_CARD_RIGHT = "wild_card_right";//通配符 模糊查询  右模糊
+        public static final String WILD_CARD_ALL = "wild_card_all";//通配符 模糊查询      全模糊
+
 
     }
 }
