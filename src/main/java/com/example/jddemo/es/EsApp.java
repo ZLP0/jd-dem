@@ -12,30 +12,16 @@ import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 
 @RestController
 public class EsApp {
 
-    public static void main(String[] args) {
-        EsData esData = new EsData();
-        esData.setUser("tom");
-        esData.setMessage("测试");
-        esData.setFood(new String[]{"鱼头","麻辣鸡"});
-        try {
-            new AbstractEs().buildSearchRequest(esData);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     @Resource
     private RestHighLevelClient esClient;
