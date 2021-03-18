@@ -10,6 +10,7 @@ import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -32,16 +33,30 @@ public class AbstractBaseEs {
     public SearchRequest buildSearchRequest(Object param) throws IllegalAccessException {
         ESTable esTable = param.getClass().getAnnotation(ESTable.class);
         if (null == esTable) {
-            throw new RuntimeException(param.getClass()+"[类上未找到 ESTable 注解]");
+            throw new RuntimeException(param.getClass() + "[类上未找到 ESTable 注解]");
         }
         if (StringUtils.isBlank(esTable.INDEX_NAME())) {
-            throw new RuntimeException(param.getClass()+"[ESTable 注解 INDEX_NAME值为空]");
+            throw new RuntimeException(param.getClass() + "[ESTable 注解 INDEX_NAME值为空]");
         }
         SearchRequest searchRequest = new SearchRequest(esTable.INDEX_NAME());
 
         SearchSourceBuilder searchSourceBuilder = buildSearchSourceBuilder(param);
+        //设置高亮展示
+        buildHighlightBuilder(searchSourceBuilder);
         searchRequest.source(searchSourceBuilder);
         return searchRequest;
+    }
+
+    /**
+     * 高亮展示
+     *
+     * @param searchSourceBuilder
+     */
+    public void buildHighlightBuilder(SearchSourceBuilder searchSourceBuilder) {
+        HighlightBuilder highlightBuilder = new HighlightBuilder().field("*").requireFieldMatch(false);
+        highlightBuilder.preTags("<span style=\"color:red\">");
+        highlightBuilder.postTags("</span>");
+        searchSourceBuilder.highlighter(highlightBuilder);
     }
 
     //termQuery(字段.keyword,"value")：单条件精确查询。
