@@ -12,35 +12,50 @@ import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
 @RestController
 public class EsApp {
 
-    public static void main(String[] args) {
+
+    @Resource
+    private RestHighLevelClient esClient;
+
+    @RequestMapping(value = "/esTest")
+    @ResponseBody
+    public List<EsDataInsert> query() {
         EsData esData = new EsData();
         esData.setUser("tom");
         esData.setMessage("测试");
         esData.setFood(new String[]{"鱼头","麻辣鸡"});
         try {
-            new AbstractEs().buildSearchRequest(esData);
-        } catch (IllegalAccessException e) {
+            AbstractBaseEs abstractBaseEs = new AbstractBaseEs();
+
+            SearchRequest searchRequest = abstractBaseEs.buildSearchRequest(esData);
+
+            SearchResponse searchResponse = esClient.search(searchRequest, RequestOptions.DEFAULT);
+            // 根据状态和数据条数验证是否返回了数据
+            if (RestStatus.OK.equals(searchResponse.status()) && searchResponse.getHits().getTotalHits().value > 0) {
+                SearchHits hits = searchResponse.getHits();
+                List<EsDataInsert> esData1 = abstractBaseEs.DataConversion(hits, EsDataInsert.class);
+                System.out.println(esData1);
+                return esData1;
+            }
+        } catch (IllegalAccessException | IOException e) {
             e.printStackTrace();
         }
-
+        return null;
     }
 
-    @Resource
-    private RestHighLevelClient esClient;
 
-    @RequestMapping(value = "/es")
+    @RequestMapping(value = "/termQuery")
     public void termQuery() {
         try {
             // 构建查询条件（注意：termQuery 支持多种格式查询，如 boolean、int、double、string 等，这里使用的是 string 的查询）
@@ -69,24 +84,49 @@ public class EsApp {
 
     @RequestMapping(value = "/insert")
     public void insert() throws IOException {
-        IndexRequest request = new IndexRequest("es_test"); //索引 es_test
-       // request.id("1"); //  id唯一 为空时es会默认创建 例如（"_id": "9VE8LHgBJWU1ODiL4r3M"）
+        IndexRequest request = new IndexRequest("es_test2"); //索引 es_test
+        // request.id("1"); //  id唯一 为空时es会默认创建 例如（"_id": "9VE8LHgBJWU1ODiL4r3M"）
 
-        EsData esData = new EsData();
+        EsDataInsert esData = new EsDataInsert();
         esData.setUser("tom");
         esData.setPostDate("2021-03-14");
-        esData.setMessage("测试数据");
-        EsData esData2 = new EsData();
+        esData.setMessage("我爱中华");
+        esData.setFood(new String[]{"麻辣豆腐", "麻辣鱼头"});
+        esData.setLocation(new double[]{116.421, 39.91});//经度 116.39  纬度 39.90
+        EsDataInsert esData2 = new EsDataInsert();
         esData2.setUser("jack");
         esData2.setPostDate("2021-03-14");
-        esData2.setMessage("测试数据2");
+        esData2.setMessage("中华人民共和国");
+        esData2.setFood(new String[]{"小龙虾", "麻辣火锅"});
+        esData2.setLocation(new double[]{117.39, 39.90});
 
-        ArrayList<EsData> list = new ArrayList<>();
+        EsDataInsert esData3 = new EsDataInsert();
+        esData3.setUser("丰台");
+        esData3.setPostDate("2021-03-14");
+        esData3.setMessage("我爱人民");
+        esData3.setFood(new String[]{"小龙虾", "麻辣火锅"});
+        esData3.setLocation(new double[]{118.39, 39.90});
+
+        EsDataInsert esData4 = new EsDataInsert();
+        esData4.setUser("生活");
+        esData4.setPostDate("2021-03-14");
+        esData4.setMessage("我爱生活");
+        esData4.setLocation(new double[]{116.421, 39.91});//经度 116.39  纬度 39.90
+
+        EsDataInsert esData5 = new EsDataInsert();
+        esData5.setUser("生活2");
+        esData5.setPostDate("2021-03-14");
+        esData5.setMessage("生活很美好");
+        esData5.setLocation(new double[]{116.421, 39.91});//经度 116.39  纬度 39.90
+
+        ArrayList<EsDataInsert> list = new ArrayList<>();
         list.add(esData);
         list.add(esData2);
+        list.add(esData3);
+        list.add(esData4);
+        list.add(esData5);
 
-        for (EsData item : list) {
-
+        for (EsDataInsert item : list) {
             request.source(JacksonUtils.toJson(item), XContentType.JSON); //以字符串形式提供的文档源
             IndexResponse indexResponse = esClient.index(request, RequestOptions.DEFAULT);
         }
