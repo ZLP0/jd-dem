@@ -3,29 +3,23 @@ package com.example.jddemo.es;
 import com.example.jddemo.es.annotation.ESQuery;
 import com.example.jddemo.es.annotation.ESTable;
 import com.example.jddemo.es.param.Location;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.util.Date;
 
 /**
  * 程序员  by dell
  * time  2021-03-14
  **/
-@ESTable(INDEX_NAME = "es_test2")
-public class EsData {
+public class EsDataInsert {
 
-    @ESQuery(ColumnName = "user", QueryType = ESQuery.ConstantQueryType.TERM)
     private String user;
 
-    private String postDate;
-    @ESQuery(ColumnName = "message", QueryType = ESQuery.ConstantQueryType.MATCH_QUERY)
+    private String  postDate;
+
     private String message;
 
-    //@ESQuery(ColumnName = "food",QueryType = ESQuery.ConstantQueryType.TERMS)
     private String[] food;
 
-    //@ESQuery(ColumnName = "location",QueryType = ESQuery.ConstantQueryType.GEO_DISTANCE)
-    private Location location;
+    private double[]  location;
+
 
     public String getUser() {
         return user;
@@ -59,11 +53,11 @@ public class EsData {
         this.food = food;
     }
 
-    public Location getLocation() {
+    public double[] getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(double[] location) {
         this.location = location;
     }
 }

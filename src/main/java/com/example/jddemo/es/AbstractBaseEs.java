@@ -1,34 +1,36 @@
 package com.example.jddemo.es;
 
-import com.example.jddemo.common.utils.ExecutorsUtil;
 import com.example.jddemo.es.annotation.ESQuery;
 import com.example.jddemo.es.annotation.ESTable;
+import com.example.jddemo.es.param.Location;
 import com.example.jddemo.jackson.JacksonUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.poi.ss.formula.functions.T;
 import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
+import org.elasticsearch.search.sort.GeoDistanceSortBuilder;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.TimeUnit;
+
 
 /**
  * 程序员  by dell
  * time  2021-03-15
  **/
-public class AbstractEs {
-
+public class AbstractBaseEs {
     /**
-     * 查询条件转化
+     * 构建查询请求
      *
      * @param param
      * @return
@@ -36,16 +38,29 @@ public class AbstractEs {
     public SearchRequest buildSearchRequest(Object param) throws IllegalAccessException {
         ESTable esTable = param.getClass().getAnnotation(ESTable.class);
         if (null == esTable) {
-            throw new RuntimeException("类上未找到 ESTable 注解");
+            throw new RuntimeException(param.getClass() + "[类上未找到 ESTable 注解]");
         }
         if (StringUtils.isBlank(esTable.INDEX_NAME())) {
-            throw new RuntimeException("ESTable 注解 INDEX_NAME值为空 ");
+            throw new RuntimeException(param.getClass() + "[ESTable 注解 INDEX_NAME值为空]");
         }
-        SearchRequest searchRequest = new SearchRequest(esTable.INDEX_NAME());
-
         SearchSourceBuilder searchSourceBuilder = buildSearchSourceBuilder(param);
+        SearchRequest searchRequest = new SearchRequest(esTable.INDEX_NAME());
+        //设置高亮展示
+        buildHighlightBuilder(searchSourceBuilder);
         searchRequest.source(searchSourceBuilder);
         return searchRequest;
+    }
+
+    /**
+     * 高亮展示
+     *
+     * @param searchSourceBuilder
+     */
+    public void buildHighlightBuilder(SearchSourceBuilder searchSourceBuilder) {
+        HighlightBuilder highlightBuilder = new HighlightBuilder().field("*").requireFieldMatch(false);
+        highlightBuilder.preTags("<span style=\"color:red\">");
+        highlightBuilder.postTags("</span>");
+        searchSourceBuilder.highlighter(highlightBuilder);
     }
 
     //termQuery(字段.keyword,"value")：单条件精确查询。
@@ -57,7 +72,15 @@ public class AbstractEs {
     //wildcardQuery("字段","*value*")：模糊查询，支持通配符。
     //queryStringQuery("value").field("字段");不使用通配符的模糊查询，左右匹配。
     //multiMatchQuery("字段","value1","value2")：多字段模糊查询
-    public SearchSourceBuilder buildSearchSourceBuilder(Object param) throws IllegalAccessException {
+
+    /**
+     * 构建查询条件
+     *
+     * @param param
+     * @return
+     * @throws IllegalAccessException
+     */
+    private SearchSourceBuilder buildSearchSourceBuilder(Object param) throws IllegalAccessException {
         SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
         //构建多条件查询
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
@@ -70,7 +93,7 @@ public class AbstractEs {
             }
             String columnName = esQuery.ColumnName();
             if (StringUtils.isBlank(columnName)) {
-                throw new RuntimeException(field.getName() + "字段 ESQUERY 注解 ColumnName 值为空 ");
+                throw new RuntimeException(field.getName() + "字段 [ESQUERY 注解 ColumnName 值为空] ");
             }
             Object value = field.get(param);
             if (null == value) {
@@ -89,23 +112,56 @@ public class AbstractEs {
                         List<Object> list = Arrays.asList(value);
                         boolQueryBuilder.filter(QueryBuilders.termsQuery(columnName, list));
                     } else {
-                        throw new RuntimeException(field.getName() + "字段 ESQUERY 注解 QueryType 类型错误 ");
+                        throw new RuntimeException(field.getName() + "字段 [ESQUERY 注解 QueryType 类型错误] ");
                     }
                     break;
                 case ESQuery.ConstantQueryType.RANGE_FROM:
-                    boolQueryBuilder.filter(QueryBuilders.rangeQuery(esQuery.ColumnName()).gte(value));
+                    boolQueryBuilder.filter(QueryBuilders.rangeQuery(columnName).gte(value));
                     break;
                 case ESQuery.ConstantQueryType.RANGE_TO:
-                    boolQueryBuilder.filter(QueryBuilders.rangeQuery(esQuery.ColumnName()).lte(value));
+                    boolQueryBuilder.filter(QueryBuilders.rangeQuery(columnName).lte(value));
                     break;
                 case ESQuery.ConstantQueryType.WILD_CARD_LEFT:
-                    boolQueryBuilder.filter(QueryBuilders.wildcardQuery(esQuery.ColumnName(), "*" + value));
+                    boolQueryBuilder.filter(QueryBuilders.wildcardQuery(columnName, "*" + value));
                     break;
                 case ESQuery.ConstantQueryType.WILD_CARD_RIGHT:
-                    boolQueryBuilder.filter(QueryBuilders.wildcardQuery(esQuery.ColumnName(), value + "*"));
+                    boolQueryBuilder.filter(QueryBuilders.wildcardQuery(columnName, value + "*"));
                     break;
                 case ESQuery.ConstantQueryType.WILD_CARD_ALL:
-                    boolQueryBuilder.filter(QueryBuilders.wildcardQuery(esQuery.ColumnName(), "*" + value + "*"));
+                    boolQueryBuilder.filter(QueryBuilders.wildcardQuery(columnName, "*" + value + "*"));
+                    break;
+                case ESQuery.ConstantQueryType.MATCH_QUERY:
+                    //ik_smart 最小分词  ik_max_word  最大分词
+                   // boolQueryBuilder.should(QueryBuilders.matchQuery(columnName, value).analyzer("ik_max_word"));
+                    boolQueryBuilder.should(QueryBuilders.matchQuery(columnName, value));
+                    break;
+                case ESQuery.ConstantQueryType.GEO_DISTANCE:
+                    if (!(value instanceof Location)) {
+                        break;
+                    }
+                    Location location = (Location) value;
+                    double lat = location.getLat();
+                    double lon = location.getLon();
+                    //默认查询1Km  默认单位Km
+                    String distance = StringUtils.isBlank(location.getDistance()) ? "1" : location.getDistance();
+                    if (lat == 0 || lon == 0) {
+                        break;
+                    }
+                    DistanceUnit distanceUnit = null;
+                    String locationDistanceUnit = location.getDistanceUnit();
+                    if (StringUtils.equals("m", locationDistanceUnit)) {
+                        distanceUnit = DistanceUnit.METERS;
+                    } else if (StringUtils.equals("km", locationDistanceUnit)) {
+                        distanceUnit = DistanceUnit.KILOMETERS;
+                    } else {
+                        // 默认千米
+                        distanceUnit = DistanceUnit.KILOMETERS;
+                    }
+                    boolQueryBuilder.filter(QueryBuilders.geoDistanceQuery(columnName).point(lat, lon).distance(distance, distanceUnit));
+                    // 距离排序
+                    GeoDistanceSortBuilder sort = SortBuilders.geoDistanceSort(columnName, lat, lon);
+                    sort.order(SortOrder.ASC);
+                    searchSourceBuilder.sort(sort);
                     break;
                 default:
                     break;
@@ -116,12 +172,15 @@ public class AbstractEs {
         return searchSourceBuilder;
     }
 
-    public List<T> DataConversion(SearchHits hits, Class<T> clazz) {
-        ArrayList<T> list = new ArrayList<T>();
+    public <T> List<T> DataConversion(SearchHits hits, Class<T> clazz) {
+        if (hits == null || hits.getHits().length <= 0) {
+            return Arrays.asList();
+        }
+        List<T> list = new ArrayList<>();
         for (SearchHit hit : hits) {
             // 将 JSON 转换成对象
             String source = hit.getSourceAsString();
-            T obj = JacksonUtils.fromIgnoreJson(source, T.class);
+            T obj = JacksonUtils.fromIgnoreJson(source, clazz);
             list.add(obj);
         }
         return list;

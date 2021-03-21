@@ -32,9 +32,13 @@ public class EsApp {
     @ResponseBody
     public List<EsDataInsert> query() {
         EsData esData = new EsData();
-        esData.setUser("tom");
-        esData.setMessage("测试");
-        esData.setFood(new String[]{"鱼头","麻辣鸡"});
+        esData.setMessage("中华美好生活");
+        //Location location = new Location();
+        //location.setLon(116.39);
+        //location.setLat(39.93);
+        //location.setDistance("500");
+        //location.setDistanceUnit("km");
+        //esData.setLocation(location);
         try {
             AbstractBaseEs abstractBaseEs = new AbstractBaseEs();
 
