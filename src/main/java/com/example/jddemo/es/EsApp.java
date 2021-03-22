@@ -7,6 +7,10 @@ import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
+import org.elasticsearch.client.indices.CreateIndexRequest;
+import org.elasticsearch.client.indices.CreateIndexResponse;
+import org.elasticsearch.common.xcontent.XContentBuilder;
+import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
@@ -135,6 +139,57 @@ public class EsApp {
             IndexResponse indexResponse = esClient.index(request, RequestOptions.DEFAULT);
         }
         System.out.println("插入结束");
+    }
+
+    /**
+     * 创建索引并指定字段类型
+     *
+     * @throws IOException
+     */
+    public void insert2() throws IOException {
+        //1.创建索引的请求
+        CreateIndexRequest request = new CreateIndexRequest("es_test3");
+
+        XContentBuilder builder = XContentFactory.jsonBuilder();
+        builder.startObject();
+        {
+            builder.startObject("properties");
+            {
+                //创建电影ID文档字段
+                builder.startObject("movie_id");
+                {
+                    builder.field("type", "long");
+                }
+                builder.endObject();
+                //创建电影名字文档字段
+                builder.startObject("movie_name");
+                {
+                    builder.field("type", "text")
+                            //插入时分词
+                            .field("analyzer", "ik_smart")
+                            //搜索时分词
+                            .field("search_analyzer", "ik_max_word");
+                }
+                builder.endObject();
+                //创建电影描述文档字段
+                builder.startObject("movie_detail");
+                {
+                    builder.field("type", "text")
+                            //插入时分词
+                            .field("analyzer", "ik_smart")
+                            //搜索时分词
+                            .field("search_analyzer", "ik_max_word");
+                }
+                builder.endObject();
+            }
+            builder.endObject();
+        }
+        builder.endObject();
+        request.mapping(builder);
+        //2客户端执行请求，请求后获得响应
+        CreateIndexResponse response = esClient.indices().create(request, RequestOptions.DEFAULT);
+        System.out.println(response);
+
     }
 
 }
