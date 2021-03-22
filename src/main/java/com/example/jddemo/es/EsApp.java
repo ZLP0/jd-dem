@@ -146,23 +146,30 @@ public class EsApp {
      *
      * @throws IOException
      */
+    @RequestMapping(value = "createIndex")
     public void insert2() throws IOException {
         //1.创建索引的请求
-        CreateIndexRequest request = new CreateIndexRequest("es_test3");
+        CreateIndexRequest request = new CreateIndexRequest("es_test2");
 
         XContentBuilder builder = XContentFactory.jsonBuilder();
         builder.startObject();
         {
             builder.startObject("properties");
             {
-                //创建电影ID文档字段
-                builder.startObject("movie_id");
+                //用户
+                builder.startObject("user");
                 {
-                    builder.field("type", "long");
+                    builder.field("type", "text");
                 }
                 builder.endObject();
-                //创建电影名字文档字段
-                builder.startObject("movie_name");
+                //时间
+                builder.startObject("postDate");
+                {
+                    builder.field("type", "text");
+                }
+                builder.endObject();
+                //描述
+                builder.startObject("message");
                 {
                     builder.field("type", "text")
                             //插入时分词
@@ -171,14 +178,10 @@ public class EsApp {
                             .field("search_analyzer", "ik_max_word");
                 }
                 builder.endObject();
-                //创建电影描述文档字段
-                builder.startObject("movie_detail");
+                //位置信息
+                builder.startObject("location");
                 {
-                    builder.field("type", "text")
-                            //插入时分词
-                            .field("analyzer", "ik_smart")
-                            //搜索时分词
-                            .field("search_analyzer", "ik_max_word");
+                    builder.field("type", "geo_point");
                 }
                 builder.endObject();
             }

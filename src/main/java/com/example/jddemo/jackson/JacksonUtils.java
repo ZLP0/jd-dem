@@ -102,14 +102,6 @@ public final class JacksonUtils {
         }
     }
 
-    // 将Map转成指定的Bean
-    public static <T>T mapToBean(Map map,Class<T> clazz)  {
-        try {
-            return IGNORE_JSON_MAPPER.readValue(toJson(map), clazz);
-        } catch (JsonProcessingException e) {
 
-            throw new RuntimeException("json转换出错", e);
-        }
-    }
 
 }

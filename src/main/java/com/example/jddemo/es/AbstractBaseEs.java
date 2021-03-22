@@ -132,8 +132,8 @@ public class AbstractBaseEs {
                     break;
                 case ESQuery.ConstantQueryType.MATCH_QUERY:
                     //ik_smart 最小分词  ik_max_word  最大分词
-                   // boolQueryBuilder.should(QueryBuilders.matchQuery(columnName, value).analyzer("ik_max_word"));
-                    boolQueryBuilder.should(QueryBuilders.matchQuery(columnName, value));
+                    boolQueryBuilder.should(QueryBuilders.matchQuery(columnName, value).analyzer("ik_max_word"));
+                    //boolQueryBuilder.should(QueryBuilders.matchQuery(columnName, value));
                     break;
                 case ESQuery.ConstantQueryType.GEO_DISTANCE:
                     if (!(value instanceof Location)) {
