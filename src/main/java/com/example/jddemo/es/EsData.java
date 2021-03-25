@@ -3,9 +3,6 @@ package com.example.jddemo.es;
 import com.example.jddemo.es.annotation.ESQuery;
 import com.example.jddemo.es.annotation.ESTable;
 import com.example.jddemo.es.param.Location;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import java.util.Date;
 
 /**
  * 程序员  by dell
@@ -14,11 +11,11 @@ import java.util.Date;
 @ESTable(INDEX_NAME = "es_test2")
 public class EsData {
 
-    @ESQuery(ColumnName = "user", QueryType = ESQuery.ConstantQueryType.TERM)
+    @ESQuery(columnName = "user", queryType = ESQuery.ConstantQueryType.TERM)
     private String user;
 
     private String postDate;
-    @ESQuery(ColumnName = "message", QueryType = ESQuery.ConstantQueryType.MATCH_QUERY)
+    @ESQuery(columnName = "message", queryType = ESQuery.ConstantQueryType.MATCH_QUERY)
     private String message;
 
     //@ESQuery(ColumnName = "food",QueryType = ESQuery.ConstantQueryType.TERMS)

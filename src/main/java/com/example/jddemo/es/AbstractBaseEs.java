@@ -91,7 +91,7 @@ public class AbstractBaseEs {
             if (null == esQuery) {
                 continue;
             }
-            String columnName = esQuery.ColumnName();
+            String columnName = esQuery.columnName();
             if (StringUtils.isBlank(columnName)) {
                 throw new RuntimeException(field.getName() + "字段 [ESQUERY 注解 ColumnName 值为空] ");
             }
@@ -100,7 +100,7 @@ public class AbstractBaseEs {
                 continue;
             }
             // boolQueryBuilder.filter()  boolQueryBuilder.must() filter比 must性能好
-            switch (esQuery.QueryType()) {
+            switch (esQuery.queryType()) {
                 case ESQuery.ConstantQueryType.TERM:
                     boolQueryBuilder.filter(QueryBuilders.termQuery(columnName, value));
                     break;
@@ -132,8 +132,7 @@ public class AbstractBaseEs {
                     break;
                 case ESQuery.ConstantQueryType.MATCH_QUERY:
                     //ik_smart 最小分词  ik_max_word  最大分词
-                    boolQueryBuilder.should(QueryBuilders.matchQuery(columnName, value).analyzer("ik_max_word"));
-                    //boolQueryBuilder.should(QueryBuilders.matchQuery(columnName, value));
+                    boolQueryBuilder.should(QueryBuilders.matchQuery(columnName, value).analyzer(esQuery.analyzerMode()));
                     break;
                 case ESQuery.ConstantQueryType.GEO_DISTANCE:
                     if (!(value instanceof Location)) {
