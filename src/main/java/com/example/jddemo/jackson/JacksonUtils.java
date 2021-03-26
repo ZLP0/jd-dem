@@ -1,18 +1,20 @@
 package com.example.jddemo.jackson;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Map;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.commons.lang3.time.DateUtils;
+
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 
 public final class JacksonUtils {
 
     public static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
-    /** 如果有不识别的属性，不会报错，只会忽略。 */
+    /**
+     * 如果有不识别的属性，不会报错，只会忽略。
+     */
     public static final ObjectMapper IGNORE_JSON_MAPPER;
 
     static {
@@ -28,6 +30,7 @@ public final class JacksonUtils {
     private JacksonUtils() {
     }
 
+    /*------------------------------转字符串-------------------------------------------------------------------------*/
     /**
      * 将对象转为 json <br>
      *
@@ -41,6 +44,7 @@ public final class JacksonUtils {
             throw new RuntimeException("转换Json出错", e);
         }
     }
+
     /**
      * 将对象转为 json <br>
      *
@@ -55,6 +59,7 @@ public final class JacksonUtils {
         }
     }
 
+    /*---------------------转对象----------------------------------------------------------------------------------------*/
     /**
      * 将字符串 json 转为对象<br>
      *
@@ -64,7 +69,6 @@ public final class JacksonUtils {
      * @return 转换后的结果
      */
     public static <T> T fromJson(String content, Class<T> type) {
-
         return toObject(JSON_MAPPER, content, type);
     }
 
@@ -77,10 +81,30 @@ public final class JacksonUtils {
      * @return 转换后的结果
      */
     public static <T> T fromIgnoreJson(String content, Class<T> type) {
-
         return toObject(IGNORE_JSON_MAPPER, content, type);
     }
 
+    /**
+     * 将 json 转对象 集合 List<Object>
+     *
+     * @param jsonValue
+     * @param valueTypeRef
+     * @param <T>
+     * @return TypeReference<List < User>> typeRef = new TypeReference<List<User>>() {};
+     * JacksonUtil.parseJson("[{}]",typeRef);
+     */
+    public static <T> T parseJson(String jsonValue, TypeReference<T> valueTypeRef) {
+        if (jsonValue == null || valueTypeRef == null) {
+            throw new IllegalArgumentException("this argument is required; it must not be null");
+        }
+        try {
+            return (T) IGNORE_JSON_MAPPER.readValue(jsonValue, valueTypeRef);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /*-----------------------------------------------------------------------------------------------------------------*/
     /**
      * 将字符串 json 转为对象<br>
      *
@@ -91,17 +115,12 @@ public final class JacksonUtils {
      * @return 转换后的结果
      */
     private static <T> T toObject(ObjectMapper mapper, String content, Class<T> type) {
-
         try {
-
             return mapper.readValue(content, type);
-
         } catch (IOException e) {
-
             throw new RuntimeException("json转换出错", e);
         }
     }
-
 
 
 }
