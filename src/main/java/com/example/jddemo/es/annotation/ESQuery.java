@@ -14,9 +14,23 @@ import java.lang.annotation.Target;
 @Target(ElementType.FIELD)
 public @interface ESQuery {
 
-    public String ColumnName();
+    /**
+     * 列名
+     * @return
+     */
+    public String columnName();
 
-    public String QueryType() default ConstantQueryType.TERM;
+    /**
+     * 查询类型  精确查询 模糊查询 全文检索 等。。。。。
+     * @return
+     */
+    public String queryType() default ConstantQueryType.TERM;
+
+    /**
+     * 分词模式  只针对 es text 类型
+     * @return
+     */
+    public String analyzerMode() default analyzerMode.IK_MAX_WORD;
 
     public static final class ConstantQueryType {
 
@@ -34,6 +48,23 @@ public @interface ESQuery {
 
         public static final String MATCH_QUERY = "match_query"; //全文检索 分词查询
 
+
+    }
+
+    /**
+     * 分词
+     */
+    public static final class analyzerMode {
+
+        /**
+         * 最大分词
+         */
+        public static final String IK_MAX_WORD="ik_max_word";
+
+        /**
+         * 最小分词
+         */
+        public static final String IK_SMART="ik_smart";
 
     }
 }
