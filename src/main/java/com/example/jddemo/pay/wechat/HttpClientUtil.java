@@ -126,4 +126,39 @@ public class HttpClientUtil {
         logger.info("req:{},resp:{}", url, responseBody);
         return null;
     }
+
+    public static String httpGetHeader(String url, String headerValue) throws Exception {
+        HttpGet httpGet = null;
+        HttpEntity httpEntity = null;
+        String responseBody = "";
+        try {
+            httpGet = new HttpGet(url);
+            httpGet.setHeader("Authorization",headerValue);
+            ResponseHandler<String> responseHandler = response -> {
+                int status = response.getStatusLine().getStatusCode();
+                if (status >= 200 && status < 300) {
+                    HttpEntity entity = response.getEntity();
+                    return entity != null ? EntityUtils.toString(entity, "UTF-8") : null;
+                } else {
+                    throw new ClientProtocolException("Unexpected response status: " + status);
+                }
+            };
+            responseBody = httpClient.execute(httpGet, responseHandler);
+            return responseBody;
+        } finally {
+            try {
+                if (httpEntity != null) {
+                    httpEntity.getContent().close();
+                }
+                if (httpGet != null) {
+                    httpGet.releaseConnection();
+                }
+            } catch (Exception e) {
+                logger.error("关闭HTTP链接异常", e);
+            }
+            logger.info("req:{},resp:{}", url, responseBody);
+        }
+    }
+
+
 }

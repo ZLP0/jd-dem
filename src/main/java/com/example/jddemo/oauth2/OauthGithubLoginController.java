@@ -1,10 +1,12 @@
 package com.example.jddemo.oauth2;
 
 import com.example.jddemo.pay.wechat.HttpClientUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -56,10 +58,7 @@ public class OauthGithubLoginController {
 
         // 2、向GitHub认证服务器申请令牌
         String url = "https://github.com/login/oauth/access_token";
-        // 传递参数grant_type、code、redirect_uri、client_id
-        String param = "grant_type=authorization_code&code=" + code + "&redirect_uri=" +
-                GITHUB_REDIRECT_URL + "&client_id=" + GITHUB_CLIENT_ID + "&client_secret=" + GITHUB_CLIENT_SECRET;
-        url="https://github.com/login/oauth/access_token?grant_type=authorization_code&code=1&client_id="+GITHUB_CLIENT_ID+"&client_secret="+GITHUB_CLIENT_SECRET;
+        url="https://github.com/login/oauth/access_token?grant_type=authorization_code&code="+code+"&client_id="+GITHUB_CLIENT_ID+"&client_secret="+GITHUB_CLIENT_SECRET;
         // 申请令牌，注意此处为post请求
         String result = HttpClientUtil.httpGet(url);
         /*
@@ -68,27 +67,40 @@ public class OauthGithubLoginController {
          * error_uri=https%3A%2F%2Fdeveloper.github.com%2Fapps%2Fmanaging-oauth-apps%2Ftroubleshooting-oauth-app-access-token-request-errors%2F%23incorrect-client-credentials
          * 成功：access_token=7c76186067e20d6309654c2bcc1545e41bac9c61&scope=&token_type=bearer
          */
-        Map<String, String> resultMap = null;//HttpClientUtils.params2Map(result);
+        if(StringUtils.isBlank(result)){
+
+            return;
+        }
+        HashMap<String, String> paramMap = new HashMap<>();
+
+        String[] params = result.split("&");
+        for (String param:params){
+            String[] keyVal = param.split("=");
+            if (keyVal.length<=1){
+                continue;
+            }
+            paramMap.put(keyVal[0],keyVal[1]);
+        }
         // 如果返回的map中包含error，表示失败，错误原因存储在error_description
-        if (resultMap.containsKey("error")) {
-            throw new Exception(resultMap.get("error_description"));
+        if (paramMap.containsKey("error")) {
+            throw new Exception(paramMap.get("error_description"));
         }
 
         // 如果返回结果中包含access_token，表示成功
-        if (!resultMap.containsKey("access_token")) {
+        if (!paramMap.containsKey("access_token")) {
             throw new Exception("获取token失败");
         }
 
         // 得到token和token_type
-        String accessToken = resultMap.get("access_token");
-        String tokenType = resultMap.get("token_type");
+        String accessToken = paramMap.get("access_token");
+        String tokenType = paramMap.get("token_type");
 
         // 3、向资源服务器请求用户信息，携带access_token和tokenType
         String userUrl = "https://api.github.com/user";
-        String userParam = "access_token=" + accessToken + "&token_type=" + tokenType;
+        String authorization = tokenType+" "+accessToken;
 
         // 申请资源
-        String userResult = HttpClientUtil.httpPost(userUrl, userParam);
+        String userResult = HttpClientUtil.httpGetHeader(userUrl, authorization);
 
         // 4、输出用户信息
         response.setContentType("text/html;charset=utf-8");
