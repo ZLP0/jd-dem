@@ -1,15 +1,19 @@
 package com.example.jddemo.oauth2;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
+import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.ClientDetailsService;
+import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
+import org.springframework.security.oauth2.provider.code.InMemoryAuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
 import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
@@ -24,6 +28,9 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    //@Autowired
+    //private AuthorizationCodeServices  authorizationCodeServices;
 
     /**
      * 授权服务的权限配置信息
@@ -51,6 +58,7 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
         endpoints.authenticationManager(authenticationManager) //关联对应的认证器
                 .allowedTokenEndpointRequestMethods(HttpMethod.POST, HttpMethod.GET)
                 .tokenServices(tokenServices()) // 设置token相关的服务
+               // .authorizationCodeServices(authorizationCodeServices)//授权码服务
         ;
     }
 
@@ -89,6 +97,13 @@ public class AuthorizationServer extends AuthorizationServerConfigurerAdapter {
         tokenServices.setSupportRefreshToken(true); // 支持刷新
         tokenServices.setClientDetailsService(clientDetailsService); // token对应的客户端信息
         tokenServices.setAccessTokenValiditySeconds(7200); // 默认的有效期
+        tokenServices.setRefreshTokenValiditySeconds(259200);//刷新令牌默认有效期三天
         return tokenServices;
     }
+
+
+   // @Bean
+   // public AuthorizationCodeServices authorizationCodeServices(){
+   //     return new InMemoryAuthorizationCodeServices();
+   // }
 }

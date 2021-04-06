@@ -8,9 +8,9 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
-
-@Configuration
-@EnableResourceServer // 表示是资源服务 解自动增加了一个类型为OAuth2AuthenticationProcessingFilter 的过滤器链
+//资源服务  需要另起一个服务
+//@Configuration
+//@EnableResourceServer // 表示是资源服务 解自动增加了一个类型为OAuth2AuthenticationProcessingFilter 的过滤器链
 public class ResourcesConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) throws Exception {
@@ -32,6 +32,11 @@ public class ResourcesConfig extends ResourceServerConfigurerAdapter {
         return tokenServices;
     }
 
+    /**
+     * 资源服务的权限
+     * @param http
+     * @throws Exception
+     */
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
