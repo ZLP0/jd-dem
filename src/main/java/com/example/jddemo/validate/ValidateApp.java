@@ -41,7 +41,6 @@ public class ValidateApp {
             }
         }
         response.setData("校验成功");
-        response.setCode(1);
         return response;
     }
 
