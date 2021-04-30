@@ -11,7 +11,7 @@ public class upload {
     public static void main(String[] args) {
 
         CommonResponse<String> response = new CommonResponse<>();
-        response.setCode(CommonResponse.CODE_NORMAL);
+        response.setCode(CommonResponse.CODE_SUCCESS);
         ExcelHelper excelHelper = null;
         //创建监听器
         AbstractEasyExcelDataListener listener = new MyDataEasyExcelListener()

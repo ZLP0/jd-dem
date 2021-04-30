@@ -19,9 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import javax.xml.ws.Response;
 import java.math.BigDecimal;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.SortedMap;
 
@@ -71,7 +69,7 @@ public class WechatPayment extends BasePayment {
             if ("SUCCESS".equals(resultMap.get("result_code"))) {
                 response.setPrepayId(resultMap.get("prepay_id"));
                 response.setCodeUrl(resultMap.get("code_url"));
-                response.setCode(CommonResponse.CODE_NORMAL);
+                response.setCode(CommonResponse.CODE_SUCCESS);
             } else {
                 String errMsg = resultMap.get("err_code") + ":" + resultMap.get("err_code_des");
                 response.setCode(CommonResponse.CODE_WARN);
