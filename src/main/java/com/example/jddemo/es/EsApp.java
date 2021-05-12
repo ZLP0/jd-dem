@@ -5,10 +5,12 @@ import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.search.SearchScrollRequest;
 import org.elasticsearch.client.RequestOptions;
 import org.elasticsearch.client.RestHighLevelClient;
 import org.elasticsearch.client.indices.CreateIndexRequest;
 import org.elasticsearch.client.indices.CreateIndexResponse;
+import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
 import org.elasticsearch.common.xcontent.XContentType;
@@ -44,9 +46,9 @@ public class EsApp {
         //location.setDistanceUnit("km");
         //esData.setLocation(location);
         try {
-            AbstractBaseEs abstractBaseEs = new AbstractBaseEs();
+            AbstractBaseEs abstractBaseEs = new BaseEs();
 
-            SearchRequest searchRequest = abstractBaseEs.buildSearchRequest(esData);
+            SearchRequest searchRequest = abstractBaseEs.buildSearchRequest(esData, 0, 10);
 
             SearchResponse searchResponse = esClient.search(searchRequest, RequestOptions.DEFAULT);
             // 根据状态和数据条数验证是否返回了数据
@@ -62,6 +64,37 @@ public class EsApp {
         return null;
     }
 
+    /**
+     * scroll方式 查询
+     * @return
+     */
+    @RequestMapping(value = "/esScrollTest")
+    @ResponseBody
+    public List<EsDataInsert> searchScroll() {
+        EsData esData = new EsData();
+        esData.setMessage("中华美好生活");
+        try {
+            AbstractBaseEs abstractBaseEs = new BaseEs();
+
+            SearchRequest searchRequest = abstractBaseEs.buildSearchScrollRequest(esData, 100, null);
+            SearchResponse response = esClient.search(searchRequest, RequestOptions.DEFAULT);
+
+            if (response.getHits().getHits().length != 0) {
+
+                SearchScrollRequest searchScrollRequest = abstractBaseEs.buildSearchScrollRequest(response.getScrollId(), null);
+                SearchResponse searchResponse = esClient.scroll(searchScrollRequest, RequestOptions.DEFAULT);
+
+                while (searchResponse.getHits().getHits().length != 0) {
+                    searchScrollRequest = abstractBaseEs.buildSearchScrollRequest(searchResponse.getScrollId(), null);
+                    searchResponse = esClient.scroll(searchScrollRequest, RequestOptions.DEFAULT);
+                }
+
+            }
+        } catch (IllegalAccessException | IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     @RequestMapping(value = "/termQuery")
     public void termQuery() {

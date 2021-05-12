@@ -6,7 +6,9 @@ import com.example.jddemo.es.param.Location;
 import com.example.jddemo.jackson.JacksonUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.search.SearchRequest;
+import org.elasticsearch.action.search.SearchScrollRequest;
 import org.elasticsearch.common.unit.DistanceUnit;
+import org.elasticsearch.common.unit.TimeValue;
 import org.elasticsearch.index.query.BoolQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
@@ -18,24 +20,21 @@ import org.elasticsearch.search.sort.SortBuilders;
 import org.elasticsearch.search.sort.SortOrder;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 
 /**
  * 程序员  by dell
  * time  2021-03-15
  **/
-public class AbstractBaseEs {
+public abstract class AbstractBaseEs {
     /**
      * 构建查询请求
      *
      * @param param
      * @return
      */
-    public SearchRequest buildSearchRequest(Object param) throws IllegalAccessException {
+    public SearchRequest buildSearchRequest(Object param, int from, int size) throws IllegalAccessException {
         ESTable esTable = param.getClass().getAnnotation(ESTable.class);
         if (null == esTable) {
             throw new RuntimeException(param.getClass() + "[类上未找到 ESTable 注解]");
@@ -44,11 +43,49 @@ public class AbstractBaseEs {
             throw new RuntimeException(param.getClass() + "[ESTable 注解 INDEX_NAME值为空]");
         }
         SearchSourceBuilder searchSourceBuilder = buildSearchSourceBuilder(param);
+        searchSourceBuilder.from(from).size(size);//设置分页
         SearchRequest searchRequest = new SearchRequest(esTable.INDEX_NAME());
         //设置高亮展示
         buildHighlightBuilder(searchSourceBuilder);
         searchRequest.source(searchSourceBuilder);
         return searchRequest;
+    }
+
+    /**
+     * 构建查询请求 scroll方式
+     *
+     * @param param
+     * @param size
+     * @param seconds
+     * @return
+     * @throws IllegalAccessException
+     */
+    public SearchRequest buildSearchScrollRequest(Object param, int size, TimeValue seconds) throws IllegalAccessException {
+        SearchRequest searchRequest = this.buildSearchRequest(param, 0, 0);
+        if (size == 0) {
+            size = 1000;
+        }
+        if (null == seconds) {
+            seconds = TimeValue.timeValueSeconds(10);
+        }
+        searchRequest.source().size(size);
+        searchRequest.scroll(seconds);
+        return searchRequest;
+    }
+
+    /**
+     * 构建查询请求 scroll方式 (根据 scrollId 滚动查询 )
+     *
+     * @param scrollId
+     * @return
+     */
+    public SearchScrollRequest buildSearchScrollRequest(String scrollId, TimeValue seconds) {
+        SearchScrollRequest scrollRequest = new SearchScrollRequest(scrollId); //通过设置所需的scroll id和scroll间隔来创建搜索scroll请求
+        if (null == seconds) {
+            seconds = TimeValue.timeValueSeconds(10);
+        }
+        scrollRequest.scroll(seconds);
+        return scrollRequest;
     }
 
     /**
