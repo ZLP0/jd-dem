@@ -30,18 +30,6 @@ import java.util.List;
 @RestController
 public class EsApp {
 
-    public static void main(String[] args) {
-        EsData esData = new EsData();
-        esData.setUser("tom");
-        esData.setMessage("测试");
-        esData.setFood(new String[]{"鱼头","麻辣鸡"});
-        try {
-            new AbstractEs().buildSearchRequest(esData);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     @Resource
     private RestHighLevelClient esClient;
