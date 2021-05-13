@@ -28,7 +28,7 @@ public class AppController {
        System.out.println("对象:"+listener);
 
        CommonResponse<String> response = new CommonResponse<>();
-       response.setCode(CommonResponse.CODE_NORMAL);
+       response.setCode(CommonResponse.CODE_SUCCESS);
        ExcelHelper excelHelper = null;
 
        try {

@@ -1,20 +1,15 @@
-package com.example.jddemo.copy;
+package com.example.jddemo.validate;
 
-import java.io.Serializable;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 
-public class Child implements Serializable {
+public class ValidatePerson {
+
+    @NotNull(message = "姓名不能为空")
     private String name;
 
+    @Min(value = 18, message = "年龄小于18岁")
     private int age;
-
-
-    @Override
-    public String toString() {
-        return "Child{" +
-                "name='" + name + '\'' +
-                ", age=" + age +
-                '}';
-    }
 
     public String getName() {
         return name;

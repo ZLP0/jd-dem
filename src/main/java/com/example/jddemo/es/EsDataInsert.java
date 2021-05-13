@@ -8,21 +8,18 @@ import com.example.jddemo.es.param.Location;
  * 程序员  by dell
  * time  2021-03-14
  **/
-@ESTable(INDEX_NAME = "es_test2")
-public class EsData {
+public class EsDataInsert {
 
-    @ESQuery(columnName = "user", queryType = ESQuery.ConstantQueryType.TERM)
     private String user;
 
-    private String postDate;
-    @ESQuery(columnName = "message", queryType = ESQuery.ConstantQueryType.MATCH_QUERY)
+    private String  postDate;
+
     private String message;
 
-    //@ESQuery(ColumnName = "food",QueryType = ESQuery.ConstantQueryType.TERMS)
     private String[] food;
 
-    //@ESQuery(ColumnName = "location",QueryType = ESQuery.ConstantQueryType.GEO_DISTANCE)
-    private Location location;
+    private double[]  location;
+
 
     public String getUser() {
         return user;
@@ -56,11 +53,11 @@ public class EsData {
         this.food = food;
     }
 
-    public Location getLocation() {
+    public double[] getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(double[] location) {
         this.location = location;
     }
 }
