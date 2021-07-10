@@ -1,10 +1,12 @@
 package com.example.jddemo.logtrace;
 
+import com.example.jddemo.common.utils.ExecutorsUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.concurrent.ExecutorService;
 
 /**
  * 程序员  by dell
@@ -22,10 +24,12 @@ public class LogTraceController {
 
         System.out.println("***************************************************************");
         //test2();
+
+        ExecutorService ex = ExecutorsUtil.newCachedThreadPool("测试log子线程");
+        ex.submit(new Thread(()->{
+            log.info("子线程 日志++++");
+        }));
         log.info("日志2");
-       /*   new Thread(()->{
-              log.info("线程");
-        }).start();*/
         System.out.println("结束");
 
 

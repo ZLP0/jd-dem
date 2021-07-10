@@ -18,7 +18,7 @@ public class LogInterceptor extends HandlerInterceptorAdapter {
     /**
      * 会话ID
      */
-    private final static String TRACE_ID = "traceId";
+    public final static String TRACE_ID = "traceId";
 
     @Override
     public boolean preHandle(HttpServletRequest request,
