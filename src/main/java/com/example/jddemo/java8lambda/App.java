@@ -1,6 +1,7 @@
 package com.example.jddemo.java8lambda;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -33,6 +34,14 @@ public class App {
         Map<Integer, List<Company>> collect = companyList.stream().collect(Collectors.groupingBy(Company::getCode));
         //名字   分组
         Map<String, List<Company>> collect1 = companyList.stream().collect(Collectors.groupingBy(Company::getName));
+
+
+        //多条件分组  方式1
+        HashMap<String, List<Company>> mapList = companyList.stream().collect(Collectors.groupingBy(obj -> obj.getCode() + "_" + obj.getName(), HashMap::new, Collectors.toList()));
+
+        //多条件分组  方式2   key  为对象方式
+        HashMap<GroupByParamDto, List<Company>> mapList2 = companyList.stream().collect(Collectors.groupingBy(d -> new GroupByParamDto(d.getCode(), d.getName()), HashMap::new, Collectors.toList()));
+
 
     }
 }
