@@ -1,6 +1,6 @@
 package com.example.jddemo.validate;
 
-import com.example.jddemo.response.CommonResponse;
+import com.example.jddemo.response.ApiResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DuplicateKeyException;
@@ -34,52 +34,52 @@ public class GlobalExceptionHandler {
      * 方法参数校验
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public CommonResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+    public ApiResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         logger.error(e.getMessage(), e);
-        return new CommonResponse(PARAM_FAIL_CODE, e.getBindingResult().getFieldError().getDefaultMessage(),null);
+        return new ApiResponse(PARAM_FAIL_CODE, e.getBindingResult().getFieldError().getDefaultMessage(),null);
     }
 
     /**
      * Validation Exception
      */
     @ExceptionHandler(ValidationException.class)
-    public CommonResponse handleValidationException(ValidationException e) {
+    public ApiResponse handleValidationException(ValidationException e) {
         logger.error(e.getMessage(), e);
-        return new CommonResponse(VALIDATION_CODE, e.getCause().getMessage(),null);
+        return new ApiResponse(VALIDATION_CODE, e.getCause().getMessage(),null);
     }
 
     /**
      * ConstraintViolationException
      */
     @ExceptionHandler(ConstraintViolationException.class)
-    public CommonResponse handleConstraintViolationException(ConstraintViolationException e) {
+    public ApiResponse handleConstraintViolationException(ConstraintViolationException e) {
         logger.error(e.getMessage(), e);
-        return new CommonResponse(PARAM_FAIL_CODE, e.getMessage(),null);
+        return new ApiResponse(PARAM_FAIL_CODE, e.getMessage(),null);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public CommonResponse handlerNoFoundException(Exception e) {
+    public ApiResponse handlerNoFoundException(Exception e) {
         logger.error(e.getMessage(), e);
-        return new CommonResponse(404, "路径不存在，请检查路径是否正确",null);
+        return new ApiResponse(404, "路径不存在，请检查路径是否正确",null);
     }
 
     @ExceptionHandler(DuplicateKeyException.class)
-    public CommonResponse handleDuplicateKeyException(DuplicateKeyException e) {
+    public ApiResponse handleDuplicateKeyException(DuplicateKeyException e) {
         logger.error(e.getMessage(), e);
-        return new CommonResponse(DUPLICATE_KEY_CODE, "数据重复，请检查后提交",null);
+        return new ApiResponse(DUPLICATE_KEY_CODE, "数据重复，请检查后提交",null);
     }
 
     @ExceptionHandler(BindException.class)
-    public CommonResponse handleBindException(BindException e) {
+    public ApiResponse handleBindException(BindException e) {
         logger.error(e.getMessage(), e);
         ObjectError objectError = e.getAllErrors().get(0);
-        return new CommonResponse(CommonResponse.CODE_WARN, objectError.getDefaultMessage(),null);
+        return new ApiResponse(ApiResponse.CODE_WARN, objectError.getDefaultMessage(),null);
     }
 
 
     @ExceptionHandler(Exception.class)
-    public CommonResponse handleException(Exception e) {
+    public ApiResponse handleException(Exception e) {
         logger.error(e.getMessage(), e);
-        return new CommonResponse(500, "系统繁忙,请稍后再试",null);
+        return new ApiResponse(500, "系统繁忙,请稍后再试",null);
     }
 }

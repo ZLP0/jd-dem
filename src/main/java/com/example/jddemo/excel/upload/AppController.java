@@ -4,7 +4,7 @@ import com.alibaba.excel.EasyExcel;
 import com.example.jddemo.excel.upload.excellistener.AbstractEasyExcelDataListener;
 import com.example.jddemo.excel.upload.excellistener.ExcelHelper;
 import com.example.jddemo.excel.upload.excellistener.MyDataEasyExcelListener;
-import com.example.jddemo.response.CommonResponse;
+import com.example.jddemo.response.ApiResponse;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,8 +27,8 @@ public class AppController {
 
        System.out.println("对象:"+listener);
 
-       CommonResponse<String> response = new CommonResponse<>();
-       response.setCode(CommonResponse.CODE_SUCCESS);
+       ApiResponse<String> response = new ApiResponse<>();
+       response.setCode(ApiResponse.CODE_SUCCESS);
        ExcelHelper excelHelper = null;
 
        try {
@@ -44,7 +44,7 @@ public class AppController {
            System.out.println(excelHelper);
        } catch (RuntimeException e) {
            e.printStackTrace();
-           response.setCode(CommonResponse.CODE_WARN);
+           response.setCode(ApiResponse.CODE_WARN);
            response.setMessage(e.getMessage());
            response.setData(excelHelper.getUrl());
        }finally {

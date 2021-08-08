@@ -5,7 +5,7 @@ package com.example.jddemo.redis.limit;
  * time  2021-02-23
  **/
 
-import com.example.jddemo.response.CommonResponse;
+import com.example.jddemo.response.ApiResponse;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -61,7 +61,7 @@ public class FangshuaInterceptor extends HandlerInterceptorAdapter {
                 redisTemplate.opsForValue().increment(key);
             }else{
                 //超出访问次数
-                render(response,new CommonResponse<>()); //这里的CodeMsg是一个返回参数
+                render(response,new ApiResponse<>()); //这里的CodeMsg是一个返回参数
                 return false;
             }
         }
@@ -69,7 +69,7 @@ public class FangshuaInterceptor extends HandlerInterceptorAdapter {
         return true;
 
     }
-    private void render(HttpServletResponse response, CommonResponse<String> cm)throws Exception {
+    private void render(HttpServletResponse response, ApiResponse<String> cm)throws Exception {
         response.setContentType("application/json;charset=UTF-8");
         OutputStream out = response.getOutputStream();
         String str  = "哎呀 访问频率过快";

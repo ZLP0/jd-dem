@@ -5,7 +5,7 @@ package com.example.jddemo.redis.limit;
  * time  2021-02-23
  **/
 
-import com.example.jddemo.response.CommonResponse;
+import com.example.jddemo.response.ApiResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -16,9 +16,9 @@ public class FangshuaController {
     @AccessLimit(seconds=10, maxCount=2, needLogin=true)
     @RequestMapping("/fangshua")
     @ResponseBody
-    public CommonResponse<String> fangshua(){
+    public ApiResponse<String> fangshua(){
 
-        CommonResponse<String> response = new CommonResponse<String>();
+        ApiResponse<String> response = new ApiResponse<String>();
         response.setMessage("成功");
 
         return response;

@@ -1,7 +1,6 @@
 package com.example.jddemo.validate;
 
-import com.example.jddemo.copy.Person;
-import com.example.jddemo.response.CommonResponse;
+import com.example.jddemo.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
@@ -33,7 +32,7 @@ public class ValidateApp {
      * @return
      */
     @RequestMapping(value = "/globalValidate")
-    public CommonResponse<String> test2(@NotNull @Valid ValidatePerson person) {
+    public ApiResponse<String> test2(@NotNull @Valid ValidatePerson person) {
 
         System.out.println(111111111);
         int i = 1 / 0;
@@ -50,9 +49,9 @@ public class ValidateApp {
      * @return
      */
     @RequestMapping(value = "/validate")
-    public CommonResponse<String> test(@NotNull @Validated ValidatePerson person, BindingResult bindingResult) {
+    public ApiResponse<String> test(@NotNull @Validated ValidatePerson person, BindingResult bindingResult) {
 
-        CommonResponse<String> response = new CommonResponse<>();
+        ApiResponse<String> response = new ApiResponse<>();
         if (bindingResult.hasErrors()) {
             for (ObjectError error : bindingResult.getAllErrors()) {
                 log.info("error:{}", error.getDefaultMessage());
@@ -66,9 +65,9 @@ public class ValidateApp {
     }
 
     @RequestMapping(value = "/validate2")
-    public CommonResponse<String> test2() {
+    public ApiResponse<String> test2() {
 
-        CommonResponse<String> response = new CommonResponse<>();
+        ApiResponse<String> response = new ApiResponse<>();
 
         ValidatePerson person = new ValidatePerson();
         person.setAge(11);

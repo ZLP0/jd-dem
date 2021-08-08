@@ -12,7 +12,7 @@ import com.example.jddemo.pay.wechat.HttpClientUtil;
 import com.example.jddemo.pay.wechat.UtilDate;
 import com.example.jddemo.pay.wechat.WeChatBuildRequest;
 import com.example.jddemo.response.AbstractResponse;
-import com.example.jddemo.response.CommonResponse;
+import com.example.jddemo.response.ApiResponse;
 import com.example.jddemo.response.PaymentResponse;
 import com.github.wxpay.sdk.WXPay;
 import lombok.extern.slf4j.Slf4j;
@@ -69,14 +69,14 @@ public class WechatPayment extends BasePayment {
             if ("SUCCESS".equals(resultMap.get("result_code"))) {
                 response.setPrepayId(resultMap.get("prepay_id"));
                 response.setCodeUrl(resultMap.get("code_url"));
-                response.setCode(CommonResponse.CODE_SUCCESS);
+                response.setCode(ApiResponse.CODE_SUCCESS);
             } else {
                 String errMsg = resultMap.get("err_code") + ":" + resultMap.get("err_code_des");
-                response.setCode(CommonResponse.CODE_WARN);
+                response.setCode(ApiResponse.CODE_WARN);
                 response.setMessage("失败");
             }
         } else {
-            response.setCode(CommonResponse.CODE_EXCEPTION);
+            response.setCode(ApiResponse.CODE_EXCEPTION);
             response.setMessage("失败");
         }
 
