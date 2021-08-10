@@ -1,0 +1,23 @@
+CREATE TABLE `t_order` (
+  `order_id` bigint(20) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `user_name` varchar(32) CHARACTER SET latin1 DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
+
+
+CREATE TABLE `t_order_0` (
+  `order_id` bigint(20) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `user_name` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
+
+CREATE TABLE `t_order_1` (
+  `order_id` bigint(20) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `user_name` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+
+
+
+
