@@ -1,5 +1,7 @@
 package com.example.jddemo.sharding;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
 /**
@@ -8,6 +10,7 @@ import java.io.Serializable;
  * @author makejava
  * @since 2021-08-08 14:32:56
  */
+@Data
 public class TOrder implements Serializable {
     private static final long serialVersionUID = -78158101798595666L;
 
@@ -15,31 +18,8 @@ public class TOrder implements Serializable {
 
     private String userName;
 
-    private Integer orderId;
+    private Long orderId;
 
 
-    public Integer getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Integer userId) {
-        this.userId = userId;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public Integer getOrderId() {
-        return orderId;
-    }
-
-    public void setOrderId(Integer orderId) {
-        this.orderId = orderId;
-    }
 
 }
