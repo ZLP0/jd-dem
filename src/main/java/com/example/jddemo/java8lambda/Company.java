@@ -12,6 +12,9 @@ public class Company {
     private  int  code;
     private String name;
 
+    public Company() {
+    }
+
     public Company(int code, String name) {
         this.code = code;
         this.name = name;

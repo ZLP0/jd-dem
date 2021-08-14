@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -31,5 +32,15 @@ public class TOrderController {
         tOrderDao.insert(tOrder);
         return ApiResponse.buildSuccess("success", tOrder);
     }
+
+    @GetMapping("query")
+    public ApiResponse query() {
+
+        TOrder tOrder = new TOrder();
+
+        List<TOrder> tOrders = tOrderDao.queryAll(tOrder);
+        return ApiResponse.buildSuccess("success", tOrder);
+    }
+
 
 }

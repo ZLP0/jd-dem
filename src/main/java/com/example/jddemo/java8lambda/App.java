@@ -1,10 +1,13 @@
 package com.example.jddemo.java8lambda;
 
+import org.springframework.beans.BeanUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @Classname App
@@ -42,6 +45,13 @@ public class App {
         //多条件分组  方式2   key  为对象方式
         HashMap<GroupByParamDto, List<Company>> mapList2 = companyList.stream().collect(Collectors.groupingBy(d -> new GroupByParamDto(d.getCode(), d.getName()), HashMap::new, Collectors.toList()));
 
+        List<Company> companyListNew = companyList.stream().map(company -> {
+            Company companyNew = new Company();
+            BeanUtils.copyProperties(company,companyNew);
+            return companyNew;
+        }).collect(Collectors.toList());
+
+        System.out.println(companyListNew);
 
     }
 }
