@@ -28,7 +28,7 @@
     </select>
 
     <!--新增所有列-->
-    <insert id="insert"  parameterType="com.example.jddemo.sharding.TOrder">
+    <insert id="insert"  useGeneratedKeys="true" keyProperty="orderId"  parameterType="com.example.jddemo.sharding.TOrder">
         insert into t_order(user_id, user_name)
         values (#{userId}, #{userName})
     </insert>
