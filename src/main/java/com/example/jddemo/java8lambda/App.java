@@ -53,5 +53,17 @@ public class App {
 
         System.out.println(companyListNew);
 
+
+        listToMap();
+
+    }
+
+    public static void  listToMap(){
+        Company company  = new Company(102,null);
+        companyList.add(company);
+        //Map<Integer, String> collect = companyList.stream().collect(Collectors.toMap(Company::getCode, Company::getName));
+        //转map value=null 解决方案  key重复 解决方案
+        Map<Integer, String> map = companyList.stream().collect(HashMap::new, (m, v) -> m.put(v.getCode(), v.getName()), HashMap::putAll);
+        System.out.println(map);
     }
 }
