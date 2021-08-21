@@ -18,6 +18,22 @@ public class RedissonAppController {
 
     @RequestMapping(value = "/lock")
     public void lock() {
+        RLock lock = redissonClient.getLock("lock_id");
+        //获取不到锁 进行阻塞 直到获取锁
+        lock.lock();
+        try {
+            System.out.println("获取锁成功");
+            Thread.sleep(60000);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            lock.unlock();
+        }
+    }
+
+
+    @RequestMapping(value = "/tryLock")
+    public void tryLock() {
         RLock rLock = redissonClient.getLock("lock_id");
         try {
             if (rLock.tryLock()) {
@@ -37,8 +53,8 @@ public class RedissonAppController {
     }
 
 
-    @RequestMapping(value = "/lock2")
-    public void lock2() {
+    @RequestMapping(value = "/tryLock2")
+    public void tryLock2() {
         RLock rLock = redissonClient.getLock("lock_id");
         try {
             //争抢锁最多等待100秒、上锁10s以后自动解锁
@@ -60,8 +76,8 @@ public class RedissonAppController {
     }
 
 
-    @RequestMapping(value = "/lock3")
-    public String lock3() {
+    @RequestMapping(value = "/tryLock3")
+    public String tryLock3() {
         RLock rLock = redissonClient.getLock("lock_id");
         try {
             //未设置 过期时间  默认锁30S   2/3 时自动续期 30s 除非宕机 否则不释放
