@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/zookeeper")
 public class ZookeeperConfigController {
 
-    @Value("${name}")
+    //@Value("${name}")
     private String name;
 
-    @Value("${sex}")
+    //@Value("${sex}")
     private String sex;
 
     @RequestMapping(value = "/getConfig")
