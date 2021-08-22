@@ -1,7 +1,7 @@
 
 #加载环境变量
-org.springframework.boot.env.EnvironmentPostProcessor=\
-  com.example.jddemo.zookeeper.configcenter.DemoEnvironmentPostProcessor
+#org.springframework.boot.env.EnvironmentPostProcessor=\
+ # com.example.jddemo.zookeeper.configcenter.DemoEnvironmentPostProcessor
 
 # spring Spi扩展  spring容器加载前执行
 org.springframework.context.ApplicationContextInitializer=\
