@@ -1,6 +1,8 @@
 package com.example.jddemo.common.utils;
 
+import com.example.jddemo.logtrace.ThreadMdcUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.MDC;
 
 import java.util.Date;
 import java.util.List;
@@ -138,4 +140,29 @@ public class ExecutorsUtil extends ThreadPoolExecutor {
             return t;
         }
     }
+
+
+
+
+    //*********************************************************************************************log  traceId  子线程传递**********
+    @Override                                                                               //*****log  traceId  子线程传递**********
+    public void execute(Runnable task) {                                                    //*****log  traceId  子线程传递**********
+        super.execute(ThreadMdcUtil.wrap(task, MDC.getCopyOfContextMap()));                 //*****log  traceId  子线程传递**********
+    }                                                                                       //*****log  traceId  子线程传递**********
+                                                                                            //*****log  traceId  子线程传递**********
+    @Override                                                                               //*****log  traceId  子线程传递**********
+    public <T> Future<T> submit(Runnable task, T result) {                                  //*****log  traceId  子线程传递**********
+        return super.submit(ThreadMdcUtil.wrap(task, MDC.getCopyOfContextMap()), result);   //*****log  traceId  子线程传递**********
+    }                                                                                       //*****log  traceId  子线程传递**********
+                                                                                            //*****log  traceId  子线程传递**********
+    @Override                                                                               //*****log  traceId  子线程传递**********
+    public <T> Future<T> submit(Callable<T> task) {                                         //*****log  traceId  子线程传递**********
+        return super.submit(ThreadMdcUtil.wrap(task, MDC.getCopyOfContextMap()));           //*****log  traceId  子线程传递**********
+    }                                                                                       //*****log  traceId  子线程传递**********
+                                                                                            //*****log  traceId  子线程传递**********
+    @Override                                                                               //*****log  traceId  子线程传递**********
+    public Future<?> submit(Runnable task) {                                                //*****log  traceId  子线程传递**********
+        return super.submit(ThreadMdcUtil.wrap(task, MDC.getCopyOfContextMap()));           //*****log  traceId  子线程传递**********
+    }                                                                                       //*****log  traceId  子线程传递**********
+    ////*******************************************************************************************log  traceId  子线程传递**********
 }

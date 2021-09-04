@@ -1,9 +1,13 @@
 package com.example.jddemo.java8lambda;
 
+import org.springframework.beans.BeanUtils;
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @Classname App
@@ -34,5 +38,32 @@ public class App {
         //名字   分组
         Map<String, List<Company>> collect1 = companyList.stream().collect(Collectors.groupingBy(Company::getName));
 
+
+        //多条件分组  方式1
+        HashMap<String, List<Company>> mapList = companyList.stream().collect(Collectors.groupingBy(obj -> obj.getCode() + "_" + obj.getName(), HashMap::new, Collectors.toList()));
+
+        //多条件分组  方式2   key  为对象方式
+        HashMap<GroupByParamDto, List<Company>> mapList2 = companyList.stream().collect(Collectors.groupingBy(d -> new GroupByParamDto(d.getCode(), d.getName()), HashMap::new, Collectors.toList()));
+
+        List<Company> companyListNew = companyList.stream().map(company -> {
+            Company companyNew = new Company();
+            BeanUtils.copyProperties(company,companyNew);
+            return companyNew;
+        }).collect(Collectors.toList());
+
+        System.out.println(companyListNew);
+
+
+        listToMap();
+
+    }
+
+    public static void  listToMap(){
+        Company company  = new Company(102,null);
+        companyList.add(company);
+        //Map<Integer, String> collect = companyList.stream().collect(Collectors.toMap(Company::getCode, Company::getName));
+        //转map value=null 解决方案  key重复 解决方案
+        Map<Integer, String> map = companyList.stream().collect(HashMap::new, (m, v) -> m.put(v.getCode(), v.getName()), HashMap::putAll);
+        System.out.println(map);
     }
 }

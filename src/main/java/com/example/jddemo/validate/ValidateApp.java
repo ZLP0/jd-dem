@@ -1,9 +1,7 @@
 package com.example.jddemo.validate;
 
-import com.example.jddemo.copy.Person;
-import com.example.jddemo.response.CommonResponse;
+import com.example.jddemo.response.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.validation.annotation.Validated;
@@ -11,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
 import javax.validation.Validation;
 import javax.validation.Validator;
 import javax.validation.constraints.NotNull;
@@ -27,11 +26,32 @@ public class ValidateApp {
      * </dependency>
      */
 
+    /**
+     * GlobalExceptionHandler  实现全局统一校验处理
+     * @param person
+     * @return
+     */
+    @RequestMapping(value = "/globalValidate")
+    public ApiResponse<String> test2(@NotNull @Valid ValidatePerson person) {
 
+        System.out.println(111111111);
+        int i = 1 / 0;
+        System.out.println(2222222);
+
+        return null;
+    }
+
+
+    /**
+     * 绑定异常 单独处理
+     * @param person
+     * @param bindingResult
+     * @return
+     */
     @RequestMapping(value = "/validate")
-    public CommonResponse<String> test(@NotNull @Validated ValidatePerson person, BindingResult bindingResult) {
+    public ApiResponse<String> test(@NotNull @Validated ValidatePerson person, BindingResult bindingResult) {
 
-        CommonResponse<String> response = new CommonResponse<>();
+        ApiResponse<String> response = new ApiResponse<>();
         if (bindingResult.hasErrors()) {
             for (ObjectError error : bindingResult.getAllErrors()) {
                 log.info("error:{}", error.getDefaultMessage());
@@ -45,9 +65,9 @@ public class ValidateApp {
     }
 
     @RequestMapping(value = "/validate2")
-    public CommonResponse<String> test2() {
+    public ApiResponse<String> test2() {
 
-        CommonResponse<String> response = new CommonResponse<>();
+        ApiResponse<String> response = new ApiResponse<>();
 
         ValidatePerson person = new ValidatePerson();
         person.setAge(11);

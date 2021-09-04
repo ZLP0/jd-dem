@@ -12,7 +12,7 @@ https://cloud.tencent.com/developer/article/1445599
         <!--设置输出格式-->
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS}  [%thread] %-5level %logger{50} - %msg   --[%X{traceId}]%n</pattern>
             <!--设置编码-->
             <charset>UTF-8</charset>
         </encoder>
@@ -38,7 +38,7 @@ https://cloud.tencent.com/developer/article/1445599
         <!--输出格式-->
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
-            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg   --[%X{traceId}]%n</pattern>
             <!--设置编码-->
             <charset>UTF-8</charset>
         </encoder>
@@ -60,14 +60,16 @@ https://cloud.tencent.com/developer/article/1445599
  -->
     <!-- 测试环境+开发环境. 多个使用逗号隔开. -->
     <springProfile name="test,dev">
-        <logger name="com.example.jddemo" level="DEBUG" additivity="false">
-            <appender-ref ref="console"/>
+        <logger name="com.example.jddemo" level="INFO" additivity="false">
+            <appender-ref ref="console"/>       <!--输出控制台-->
+            <appender-ref ref="timeFileOutput"/><!--输入到日志文件-->
         </logger>
     </springProfile>
     <!-- 生产环境. -->
     <springProfile name="prod">
         <logger name="com.example.jddemo" level="INFO" additivity="false">
-            <appender-ref ref="timeFileOutput"/>
+            <appender-ref ref="console"/>      <!--输出控制台-->
+            <appender-ref ref="timeFileOutput"/><!--输入到日志文件-->
         </logger>
     </springProfile>
 

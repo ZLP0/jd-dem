@@ -5,7 +5,7 @@ import com.alipay.easysdk.payment.common.models.AlipayTradeRefundResponse;
 import com.example.jddemo.jackson.JacksonUtils;
 import com.example.jddemo.pay.request.PaymentRequest;
 import com.example.jddemo.pay.service.PayCoreService;
-import com.example.jddemo.response.CommonResponse;
+import com.example.jddemo.response.ApiResponse;
 import com.example.jddemo.response.PaymentResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
@@ -24,7 +24,6 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * 程序员  by dell
@@ -57,10 +56,10 @@ public class App {
         paymentRequest.setTradeNo("1233");
         paymentRequest.setTotalFee(new BigDecimal(101));
         logger.info("订单号：======================：" + paymentRequest.getTradeNo());
-        CommonResponse<PaymentResponse> objectCommonResponse = payCoreService.execPay(paymentRequest);
+        ApiResponse<PaymentResponse> objectApiResponse = payCoreService.execPay(paymentRequest);
 
-        System.out.println(objectCommonResponse);
-        response.getWriter().write(objectCommonResponse.getData().getHtmlStr());
+        System.out.println(objectApiResponse);
+        response.getWriter().write(objectApiResponse.getData().getHtmlStr());
         response.getWriter().flush();
 
 
