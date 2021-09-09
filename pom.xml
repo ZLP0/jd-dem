@@ -286,6 +286,10 @@
         </dependency>
         <!-- zookeeper  分布式锁 end-->
 
+        <dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
