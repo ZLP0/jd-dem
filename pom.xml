@@ -297,6 +297,12 @@
             <artifactId>zookeeper-jute</artifactId>
             <version>3.6.3</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.66</version>
+        </dependency>
     </dependencies>
 
     <dependencyManagement>
