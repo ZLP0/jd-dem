@@ -21,8 +21,8 @@ import java.lang.reflect.Method;
 @Slf4j
 public class ClientProxy implements MethodInterceptor {
 
-    private  String host;
-    private  int port;
+    private String host;
+    private int port;
 
     public ClientProxy(String host, int port) {
         this.host = host;
@@ -33,19 +33,18 @@ public class ClientProxy implements MethodInterceptor {
 
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(clazz);
-        enhancer.setCallback(new ClientProxy(host,port));
+        enhancer.setCallback(new ClientProxy(host, port));
         return (T) enhancer.create();
     }
 
     @Override
     public Object intercept(Object o, Method method, Object[] params, MethodProxy methodProxy) throws Throwable {
         log.info("begin invoke target server");
-        RpcProtocol<RpcRequest> reqProtocol=new RpcProtocol<>();
-        long requestId= RequestHolder.REQUEST_ID.incrementAndGet();
-        Header header=new Header(RpcConstant.MAGIC, SerialType.JSON_SERIAL.code(),
-                ReqType.REQUEST.code(),requestId,0);
+        RpcProtocol<RpcRequest> reqProtocol = new RpcProtocol<>();
+        long requestId = RequestHolder.REQUEST_ID.incrementAndGet();
+        Header header = new Header(RpcConstant.MAGIC, SerialType.JSON_SERIAL.code(), ReqType.REQUEST.code(), requestId, 0);
         reqProtocol.setHeader(header);
-        RpcRequest request=new RpcRequest();
+        RpcRequest request = new RpcRequest();
         request.setClassName(method.getDeclaringClass().getName());
         request.setMethodName(method.getName());
         request.setParameterTypes(method.getParameterTypes());
@@ -53,9 +52,9 @@ public class ClientProxy implements MethodInterceptor {
         reqProtocol.setContent(request);
 
 
-        NettyClient nettyClient=new NettyClient(host,port);
-        RpcFuture<RpcResponse> future=new RpcFuture<>(new DefaultPromise<RpcResponse>(new DefaultEventLoop()));
-        RequestHolder.REQUEST_MAP.put(requestId,future);
+        NettyClient nettyClient = new NettyClient(host, port);
+        RpcFuture<RpcResponse> future = new RpcFuture<>(new DefaultPromise<RpcResponse>(new DefaultEventLoop()));
+        RequestHolder.REQUEST_MAP.put(requestId, future);//设置   Future 存储在Map中 在RpcClientHandler中 等待服务端返回结果 并处理Future 结果
         nettyClient.sendRequest(reqProtocol);
         return future.getPromise().get().getData();
     }
